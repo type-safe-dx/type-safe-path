@@ -12,7 +12,7 @@ export function createObjectString(paths: string[]): string {
    * /posts/edit is depth 1
    *
    * indexがdepthと対応している。
-   * e.g. /posts, /users, /users/[id] とパスが存在していれば [['posts', 'users'], ['[id]']]] となる
+   * e.g. /posts, /users, /users/[id] とパスが存在していれば [['posts', 'users'], ['[id]']] となる
    */
   let depthToSegmentList: Segment[][] = []
 
