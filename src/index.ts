@@ -42,7 +42,6 @@ export function createObjectString(paths: string[]): string {
 
   const $path = new StaticSegment({ value: "" })
   $path.children = depthToSegmentList[0]
-  depthToSegmentList[0].forEach((segment) => (segment.parent = $path))
 
   // $path.toObjectString() = `: { ... }`なので、先頭の:を削除する
   return "const $path =" + $path.toObjectString().slice(1)
@@ -76,7 +75,7 @@ abstract class Segment {
 
   getAbsolutePath(): string {
     if (this.value === "index") return this.parent?.getAbsolutePath() ?? ""
-    if (this.parent == null) return this.toPath()
+    if (this.parent == null) return `/${this.toPath()}`
     return `${this.parent.getAbsolutePath()}/${this.toPath()}`
   }
 }
@@ -84,7 +83,7 @@ abstract class Segment {
 /**
  * `posts/[id]/edit`の posts や edit など静的に決まる部分を表す
  */
-class StaticSegment extends Segment {
+export class StaticSegment extends Segment {
   override toObjectString() {
     if (this.children.length === 0)
       return `${this.value}: \`${this.getAbsolutePath()}\``
@@ -101,9 +100,10 @@ class StaticSegment extends Segment {
 /**
  * `posts/[id]/edit`の [id]など動的に決まる部分を表す
  */
-class DynamicSegment extends Segment {
+export class DynamicSegment extends Segment {
+  /** 先頭の[と末尾の]を削除した値 */
   get trimmedValue() {
-    return this.value.slice(1, -1) // value: [id] trimmedValue: id
+    return this.value.slice(1, -1) // value: [id] であれば trimmedValue: id
   }
   override toObjectString() {
     return `${this.trimmedValue}: (${this.trimmedValue}${
