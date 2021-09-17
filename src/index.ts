@@ -12,7 +12,7 @@ export function createObjectString(paths: string[]): string {
    * /posts/edit is depth 1
    *
    * indexがdepthと対応している。
-   * e.g. /posts, /users とパスが存在していれば [['posts', 'users']] となる
+   * e.g. /posts, /users, /users/[id] とパスが存在していれば [['posts', 'users'], ['[id]']]] となる
    */
   let depthToSegmentList: Segment[][] = []
 
@@ -42,15 +42,17 @@ export function createObjectString(paths: string[]): string {
 
   const $path = new StaticSegment({ value: "" })
   $path.children = depthToSegmentList[0]
+  depthToSegmentList[0].forEach((segment) => (segment.parent = $path))
 
-  return "const $path =" + $path.toObjectString().slice(1) // :を削除する
+  // $path.toObjectString() = `: { ... }`なので、先頭の:を削除する
+  return "const $path =" + $path.toObjectString().slice(1)
 }
 
-function segmentFactory(segment: string): Segment {
-  if (segment.startsWith("[") && segment.endsWith("]")) {
-    return new DynamicSegment({ value: segment.slice(1, -1) })
+function segmentFactory(segmentStr: string): Segment {
+  if (segmentStr.startsWith("[") && segmentStr.endsWith("]")) {
+    return new DynamicSegment({ value: segmentStr })
   } else {
-    return new StaticSegment({ value: segment })
+    return new StaticSegment({ value: segmentStr })
   }
 }
 
@@ -100,8 +102,13 @@ class StaticSegment extends Segment {
  * `posts/[id]/edit`の [id]など動的に決まる部分を表す
  */
 class DynamicSegment extends Segment {
+  get trimmedValue() {
+    return this.value.slice(1, -1) // value: [id] trimmedValue: id
+  }
   override toObjectString() {
-    return `${this.value}: (${this.value}${this.isTs ? ": string" : ""}) => ${
+    return `${this.trimmedValue}: (${this.trimmedValue}${
+      this.isTs ? ": string" : ""
+    }) => ${
       this.children.length === 0
         ? `\`${this.getAbsolutePath()}\``
         : `({ ${this.children
@@ -111,6 +118,6 @@ class DynamicSegment extends Segment {
   }
 
   override toPath() {
-    return "${" + this.value + "}"
+    return "${" + this.trimmedValue + "}"
   }
 }

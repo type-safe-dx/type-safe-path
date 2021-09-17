@@ -41,7 +41,7 @@ describe("base path", () => {
         "posts/[id]/edit.svelte",
       ])
     ).toEqual(
-      `const $path = { posts: { index: \`posts\`, id: (id: string) => ({ index: \`posts/\${id}\`, edit: \`posts/\${id}/edit\` }) } }`
+      `const $path = { posts: { index: \`/posts\`, id: (id: string) => ({ index: \`/posts/\${id}\`, edit: \`/posts/\${id}/edit\` }) } }`
     )
   })
 })
