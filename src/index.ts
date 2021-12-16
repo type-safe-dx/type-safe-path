@@ -2,21 +2,21 @@ const EXTENSIONS = ["svelte"].map((ext) => `.${ext}`)
 
 /**
  *
- * @param paths e.g. posts/index.svelte 前後にスラッシュを入れてはいけない。
- * @returns
+ * @param pathList e.g. posts/index.svelte 前後にスラッシュを入れてはいけない。
+ * @returns const $path = { posts: { index: `/posts` } }
  */
-export function createObjectString(paths: string[]): string {
+export function createPathObjectStringByPathList(pathList: string[]): string {
   /**
    * About depth: e.g.
    * /posts is depth 0
    * /posts/edit is depth 1
    *
-   * indexがdepthと対応している。
+   * 配列のindexがdepthと対応している。
    * e.g. /posts, /users, /users/[id] とパスが存在していれば [['posts', 'users'], ['[id]']] となる
    */
   let depthToSegmentList: Segment[][] = []
 
-  paths.forEach((path) => {
+  pathList.forEach((path) => {
     const eachPathSegmentStrList = path
       .replace(new RegExp(EXTENSIONS.join("|")), "")
       .split("/")
