@@ -48,4 +48,14 @@ describe("base path", () => {
       `const $path = { posts: { index: \`/posts\`, id: (id: string) => ({ index: \`/posts/\${id}\`, edit: \`/posts/\${id}/edit\` }) } }`
     )
   })
+
+  it("nested file (ts)", () => {
+    expect(
+      createPathObjectStringByPathList([
+        "posts/[postId]/comments/[commentId]/index.svelte",
+      ])
+    ).toEqual(
+      `const $path = { posts: { postId: (postId: string) => ({ comments: { commentId: (commentId: string) => ({ index: \`/posts/\${postId}/comments/\${commentId}\` }) } }) } }`
+    )
+  })
 })
