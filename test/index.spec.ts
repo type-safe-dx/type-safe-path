@@ -1,4 +1,4 @@
-import { createPathObjectStringByPathList } from "../src"
+import { createPathObjectStringByPathList } from "../src/core"
 
 describe("only one file (ts)", () => {
   it("posts/index.svelte", () => {
