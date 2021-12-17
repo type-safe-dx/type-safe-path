@@ -2,7 +2,7 @@ import { deepMerge, ArrowFunction } from "./utils"
 const EXTENSIONS = ["svelte"].map((ext) => `.${ext}`)
 
 /**
- * @param pathList e.g. posts/index.svelte 前後にスラッシュを入れてはいけない。
+ * @param pathList e.g. posts/index.svelte
  * @returns const $path = { posts: { index: `/posts` } }
  */
 export function createPathObjectStringByPathList(pathList: string[]): string {
@@ -28,6 +28,7 @@ export function createPathObjectStringByPathList(pathList: string[]): string {
     pathObject = deepMerge(pathObject, current)
   })
 
+  // remove double quotes or back slash in JSON to make valid JavaScript/TypeScript code.
   return "export const $path=" + JSON.stringify(pathObject).replace(/"|\\/g, "")
 }
 
