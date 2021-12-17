@@ -9,6 +9,11 @@
     "lint:fix": "eslint . --fix --ignore-path .gitignore && prettier --write . --ignore-path .gitignore",
     "test": "jest"
   },
+  "dependencies": {
+    "kleur": "^4.1.4",
+    "minimist": "^1.2.5",
+    "tiny-glob": "^0.2.9"
+  },
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/minimist": "^1.2.2",
@@ -24,11 +29,6 @@
   },
   "jest": {
     "preset": "ts-jest"
-  },
-  "dependencies": {
-    "kleur": "^4.1.4",
-    "minimist": "^1.2.5",
-    "tiny-glob": "^0.2.9"
   },
   "volta": {
     "node": "16.13.1",
