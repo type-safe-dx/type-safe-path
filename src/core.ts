@@ -1,123 +1,45 @@
+import { deepMerge, ArrowFunction } from "./utils"
 const EXTENSIONS = ["svelte"].map((ext) => `.${ext}`)
 
 /**
- *
  * @param pathList e.g. posts/index.svelte 前後にスラッシュを入れてはいけない。
  * @returns const $path = { posts: { index: `/posts` } }
  */
 export function createPathObjectStringByPathList(pathList: string[]): string {
-  /**
-   * About depth: e.g.
-   * /posts is depth 0
-   * /posts/edit is depth 1
-   *
-   * 配列のindexがdepthと対応している。
-   * e.g. /posts, /users, /users/[id] とパスが存在していれば [['posts', 'users'], ['[id]']] となる
-   */
-  let depthToSegmentList: Segment[][] = []
-
+  let pathObject: Record<string, any> = {}
   pathList.forEach((path) => {
-    const eachPathSegmentStrList = path
-      .replace(new RegExp(EXTENSIONS.join("|")), "")
-      .split("/")
-    eachPathSegmentStrList.forEach((segmentStr, depth) => {
-      depthToSegmentList[depth] ??= []
-      // 同じdepthに同一のsegmentがあれば次のループへ
-      if (
-        depthToSegmentList[depth].some(
-          (segment) => segment.value === segmentStr
-        )
-      )
-        return
+    if (path.startsWith("/")) path = path.slice(1)
+    let current: any =
+      "`" + omitExtensions(path).replace(/\[(\w+)\]/, "${$1}") + "`"
 
-      const segment = segmentFactory(segmentStr)
-      const parentSegment: Segment | undefined = depthToSegmentList[
-        depth - 1
-      ]?.find((seg) => seg.value === eachPathSegmentStrList[depth - 1])
-      segment.parent = parentSegment
-      parentSegment?.children.push(segment)
-      depthToSegmentList[depth].push(segment)
+    const segments = path.split("/")
+    segments.reverse().forEach((segment) => {
+      if (isDynamicSegment(omitExtensions(segment))) {
+        const param = omitExtensions(segment).slice(1, -1)
+        current = { [param]: new ArrowFunction(param, current) }
+      } else {
+        current = { [omitExtensions(segment)]: current }
+      }
     })
+    pathObject = deepMerge(pathObject, current)
   })
 
-  const $path = new StaticSegment({ value: "" })
-  $path.children = depthToSegmentList[0]
-
-  // $path.toObjectString() = `: { ... }`なので、先頭の:を削除する
-  return "const $path =" + $path.toObjectString().slice(1)
+  return (
+    "export const $path = " +
+    JSON.stringify(pathObject, null, 2).replace(/"|\\/g, "")
+  )
 }
 
-function segmentFactory(segmentStr: string): Segment {
-  if (segmentStr.startsWith("[") && segmentStr.endsWith("]")) {
-    return new DynamicSegment({ value: segmentStr })
-  } else {
-    return new StaticSegment({ value: segmentStr })
-  }
+/** @private */
+function omitExtensions(str: string) {
+  return str.replace(new RegExp(EXTENSIONS.join("|")), "")
 }
 
-/** StaticSegment, DynamicSegmentの基底クラス */
-abstract class Segment {
-  value: string // e.g. posts
-  parent?: Segment
-  children: Segment[]
-  isTs: boolean = true
-
-  constructor(args: { value: string; parent?: Segment; children?: Segment[] }) {
-    this.value = args.value
-    this.parent = args.parent
-    this.children = args.children ?? []
-  }
-
-  abstract toObjectString(): string
-
-  /** posts/[id]/editのedit部分であれば、editを返す。[id]部分であれば、${id}を返す */
-  abstract toPath(): string
-
-  getAbsolutePath(): string {
-    if (this.value === "index") return this.parent?.getAbsolutePath() ?? ""
-    if (this.parent == null) return `/${this.toPath()}`
-    return `${this.parent.getAbsolutePath()}/${this.toPath()}`
-  }
+/** @private */
+function isDynamicSegment(segment: string) {
+  return /^\[\w+\]$/.test(segment)
 }
 
-/**
- * `posts/[id]/edit`の posts や edit など静的に決まる部分を表す
- */
-export class StaticSegment extends Segment {
-  override toObjectString() {
-    if (this.children.length === 0)
-      return `${this.value}: \`${this.getAbsolutePath()}\``
-    return `${this.value}: { ${this.children
-      .map((child) => child.toObjectString())
-      .join(", ")} }`
-  }
-
-  override toPath() {
-    return this.value === "index" ? "" : this.value
-  }
-}
-
-/**
- * `posts/[id]/edit`の [id]など動的に決まる部分を表す
- */
-export class DynamicSegment extends Segment {
-  /** 先頭の[と末尾の]を削除した値 */
-  get trimmedValue() {
-    return this.value.slice(1, -1) // value: [id] であれば trimmedValue: id
-  }
-  override toObjectString() {
-    return `${this.trimmedValue}: (${this.trimmedValue}${
-      this.isTs ? ": string" : ""
-    }) => ${
-      this.children.length === 0
-        ? `\`${this.getAbsolutePath()}\``
-        : `({ ${this.children
-            .map((child) => child.toObjectString())
-            .join(", ")} })`
-    }`
-  }
-
-  override toPath() {
-    return "${" + this.trimmedValue + "}"
-  }
-}
+console.log(
+  createPathObjectStringByPathList(["posts/index.svelte", "posts/[id].svelte"])
+)
