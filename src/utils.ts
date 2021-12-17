@@ -10,7 +10,7 @@ export class ArrowFunction {
       typeof this.returnObj === "string"
         ? this.returnObj
         : "(" + JSON.stringify(this.returnObj) + ")"
-    }`
+    }`;
   }
 }
 
@@ -27,14 +27,14 @@ export function deepMerge(
         objA[key] = new ArrowFunction(
           objA[key].argName,
           deepMerge(objA[key].returnObj, objB[key].returnObj)
-        )
+        );
       }
     } else if (objA[key] instanceof Object) {
-      objA[key] = deepMerge(objA[key], objB[key])
+      objA[key] = deepMerge(objA[key], objB[key]);
     } else {
-      objA[key] = objB[key]
+      objA[key] = objB[key];
     }
   }
 
-  return objA
+  return objA;
 }
