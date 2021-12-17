@@ -10,7 +10,11 @@ export function createPathObjectStringByPathList(pathList: string[]): string {
   pathList.forEach((path) => {
     if (path.startsWith("/")) path = path.slice(1)
     let current: any =
-      "`" + omitExtensions(path).replace(/\[(\w+)\]/, "${$1}") + "`"
+      "`/" +
+      omitExtensions(path)
+        .replace(/\[(\w+)\]/g, "${$1}")
+        .replace(/\/index$/, "") +
+      "`"
 
     const segments = path.split("/")
     segments.reverse().forEach((segment) => {
@@ -24,10 +28,7 @@ export function createPathObjectStringByPathList(pathList: string[]): string {
     pathObject = deepMerge(pathObject, current)
   })
 
-  return (
-    "export const $path = " +
-    JSON.stringify(pathObject, null, 2).replace(/"|\\/g, "")
-  )
+  return "export const $path=" + JSON.stringify(pathObject).replace(/"|\\/g, "")
 }
 
 /** @private */
@@ -39,7 +40,3 @@ function omitExtensions(str: string) {
 function isDynamicSegment(segment: string) {
   return /^\[\w+\]$/.test(segment)
 }
-
-console.log(
-  createPathObjectStringByPathList(["posts/index.svelte", "posts/[id].svelte"])
-)

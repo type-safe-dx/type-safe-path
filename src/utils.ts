@@ -6,10 +6,10 @@ export class ArrowFunction {
   ) {}
 
   toJSON() {
-    return `(${this.argName}${this.opt.isTS ? ": string" : ""}) => ${
+    return `(${this.argName}${this.opt.isTS ? ":string" : ""})=>${
       typeof this.returnObj === "string"
         ? this.returnObj
-        : `(${JSON.stringify(this.returnObj)})`
+        : "(" + JSON.stringify(this.returnObj) + ")"
     }`
   }
 }
@@ -24,12 +24,10 @@ export function deepMerge(
       objB[key] instanceof ArrowFunction
     ) {
       if (objA[key].argName === objB[key].argName) {
-        objA[key] = {
-          [key]: new ArrowFunction(
-            objA[key].argName,
-            deepMerge(objA.returnObj, objB.returnObj)
-          ),
-        }
+        objA[key] = new ArrowFunction(
+          objA[key].argName,
+          deepMerge(objA[key].returnObj, objB[key].returnObj)
+        )
       }
     } else if (objA[key] instanceof Object) {
       objA[key] = deepMerge(objA[key], objB[key])
