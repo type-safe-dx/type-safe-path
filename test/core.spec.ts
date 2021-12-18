@@ -3,13 +3,13 @@ import { createPathObjectStringByPathList } from "../src/core";
 describe("only one file (ts)", () => {
   it("posts/index.svelte", () => {
     expect(createPathObjectStringByPathList(["posts/index.svelte"])).toEqual(
-      "export const $path={posts:{index:`/posts`}}"
+      "export const PATHS={posts:{index:`/posts`}}"
     );
   });
 
   it("posts/edit.svelte", () => {
     expect(createPathObjectStringByPathList(["posts/edit.svelte"])).toEqual(
-      "export const $path={posts:{edit:`/posts/edit`}}"
+      "export const PATHS={posts:{edit:`/posts/edit`}}"
     );
   });
 
@@ -17,13 +17,13 @@ describe("only one file (ts)", () => {
     expect(
       createPathObjectStringByPathList(["posts/[id]/index.svelte"])
     ).toEqual(
-      "export const $path={posts:{id:(id:string)=>({index:`/posts/${id}`})}}"
+      "export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}"
     );
   });
 
   it("posts/[id].svelte", () => {
     expect(createPathObjectStringByPathList(["posts/[id].svelte"])).toEqual(
-      "export const $path={posts:{id:(id:string)=>`/posts/${id}`}}"
+      "export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}"
     );
   });
 
@@ -31,7 +31,7 @@ describe("only one file (ts)", () => {
     expect(
       createPathObjectStringByPathList(["posts/[id]/edit.svelte"])
     ).toEqual(
-      "export const $path={posts:{id:(id:string)=>({edit:`/posts/${id}/edit`})}}"
+      "export const PATHS={posts:{id:(id:string)=>({edit:`/posts/${id}/edit`})}}"
     );
   });
 });
@@ -45,7 +45,7 @@ describe("base path", () => {
         "posts/[id]/edit.svelte",
       ])
     ).toEqual(
-      "export const $path={posts:{index:`/posts`,id:(id:string)=>({index:`/posts/${id}`,edit:`/posts/${id}/edit`})}}"
+      "export const PATHS={posts:{index:`/posts`,id:(id:string)=>({index:`/posts/${id}`,edit:`/posts/${id}/edit`})}}"
     );
   });
 
@@ -55,7 +55,7 @@ describe("base path", () => {
         "posts/[postId]/comments/[commentId]/index.svelte",
       ])
     ).toEqual(
-      "export const $path={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}"
+      "export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}"
     );
   });
 });
