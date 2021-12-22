@@ -15,7 +15,7 @@
     "tiny-glob": "0.2.9"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.1",
+    "@types/jest": "27.0.3",
     "@types/minimist": "1.2.2",
     "@typescript-eslint/eslint-plugin": "5.7.0",
     "@typescript-eslint/parser": "5.7.0",
