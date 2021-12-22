@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.ts"
+      exclude: "node_modules/**"
+      run: yarn eslint --fix {staged_files} && yarn prettier --write {staged_files}
+    type:
+      glob: "*.ts"
+      exclude: "node_modules/**"
+      run: yarn tsc --noEmit
+    format:
+      glob: "*.{yml,yaml,md,json}"
+      run: yarn prettier --write {staged_files}
