@@ -7,7 +7,7 @@ pages/
          └──[id].svelte
 ```
 
-↓ `tsp "src/routes/**" -o src/paths.ts`
+↓ `tsp "src/pages/**" -o src/paths.ts`
 
 ```ts
 // src/path.ts
