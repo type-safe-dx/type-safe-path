@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "prepare": "lefthook install",
     "lint:check": "eslint . --ignore-path .gitignore && prettier --check . --ignore-path .gitignore",
     "lint:fix": "eslint . --fix --ignore-path .gitignore && prettier --write . --ignore-path .gitignore",
     "test": "jest"
