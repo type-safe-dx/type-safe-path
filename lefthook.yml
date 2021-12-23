@@ -3,11 +3,9 @@ pre-commit:
   commands:
     lint:
       glob: "*.ts"
-      exclude: "node_modules/**"
       run: pnpm eslint --fix {staged_files} && pnpm prettier --write {staged_files} && git add {staged_files}
     type:
       glob: "*.ts"
-      exclude: "node_modules/**"
       run: pnpm tsc --noEmit
     format:
       glob: "*.{yml,yaml,md,json}"
