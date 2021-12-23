@@ -5,20 +5,11 @@ extends:
   - eslint:recommended
   - plugin:@typescript-eslint/recommended
   - prettier
-parser: "@typescript-eslint/parser"
+parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 13
   sourceType: module
 plugins:
-  - "@typescript-eslint"
+  - '@typescript-eslint'
 rules:
-  indent:
-    - error
-    - 2
-  linebreak-style:
-    - error
-    - unix
-  quotes:
-    - error
-    - double
-  "@typescript-eslint/no-explicit-any": off
+  '@typescript-eslint/no-explicit-any': off

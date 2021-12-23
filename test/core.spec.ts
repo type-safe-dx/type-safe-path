@@ -1,61 +1,61 @@
-import { createPathObjectStringByPathList } from "../src/core";
+import { createPathObjectStringByPathList } from '../src/core'
 
-describe("only one file (ts)", () => {
-  it("posts/index.svelte", () => {
-    expect(createPathObjectStringByPathList(["posts/index.svelte"])).toEqual(
-      "export const PATHS={posts:{index:`/posts`}}"
-    );
-  });
+describe('only one file (ts)', () => {
+  it('posts/index.svelte', () => {
+    expect(createPathObjectStringByPathList(['posts/index.svelte'])).toEqual(
+      'export const PATHS={posts:{index:`/posts`}}'
+    )
+  })
 
-  it("posts/edit.svelte", () => {
-    expect(createPathObjectStringByPathList(["posts/edit.svelte"])).toEqual(
-      "export const PATHS={posts:{edit:`/posts/edit`}}"
-    );
-  });
+  it('posts/edit.svelte', () => {
+    expect(createPathObjectStringByPathList(['posts/edit.svelte'])).toEqual(
+      'export const PATHS={posts:{edit:`/posts/edit`}}'
+    )
+  })
 
-  it("posts/[id]/index.svelte", () => {
+  it('posts/[id]/index.svelte', () => {
     expect(
-      createPathObjectStringByPathList(["posts/[id]/index.svelte"])
+      createPathObjectStringByPathList(['posts/[id]/index.svelte'])
     ).toEqual(
-      "export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}"
-    );
-  });
+      'export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}'
+    )
+  })
 
-  it("posts/[id].svelte", () => {
-    expect(createPathObjectStringByPathList(["posts/[id].svelte"])).toEqual(
-      "export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}"
-    );
-  });
+  it('posts/[id].svelte', () => {
+    expect(createPathObjectStringByPathList(['posts/[id].svelte'])).toEqual(
+      'export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}'
+    )
+  })
 
-  it("posts/[id]/edit.svelte", () => {
+  it('posts/[id]/edit.svelte', () => {
     expect(
-      createPathObjectStringByPathList(["posts/[id]/edit.svelte"])
+      createPathObjectStringByPathList(['posts/[id]/edit.svelte'])
     ).toEqual(
-      "export const PATHS={posts:{id:(id:string)=>({edit:`/posts/${id}/edit`})}}"
-    );
-  });
-});
+      'export const PATHS={posts:{id:(id:string)=>({edit:`/posts/${id}/edit`})}}'
+    )
+  })
+})
 
-describe("base path", () => {
-  it("multiple file (ts)", () => {
-    expect(
-      createPathObjectStringByPathList([
-        "posts/index.svelte",
-        "posts/[id]/index.svelte",
-        "posts/[id]/edit.svelte",
-      ])
-    ).toEqual(
-      "export const PATHS={posts:{index:`/posts`,id:(id:string)=>({index:`/posts/${id}`,edit:`/posts/${id}/edit`})}}"
-    );
-  });
-
-  it("nested file (ts)", () => {
+describe('base path', () => {
+  it('multiple file (ts)', () => {
     expect(
       createPathObjectStringByPathList([
-        "posts/[postId]/comments/[commentId]/index.svelte",
+        'posts/index.svelte',
+        'posts/[id]/index.svelte',
+        'posts/[id]/edit.svelte',
       ])
     ).toEqual(
-      "export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}"
-    );
-  });
-});
+      'export const PATHS={posts:{index:`/posts`,id:(id:string)=>({index:`/posts/${id}`,edit:`/posts/${id}/edit`})}}'
+    )
+  })
+
+  it('nested file (ts)', () => {
+    expect(
+      createPathObjectStringByPathList([
+        'posts/[postId]/comments/[commentId]/index.svelte',
+      ])
+    ).toEqual(
+      'export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}'
+    )
+  })
+})

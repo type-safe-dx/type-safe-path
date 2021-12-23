@@ -33,7 +33,10 @@
   "jest": {
     "preset": "ts-jest"
   },
-  "prettier": {},
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  },
   "volta": {
     "node": "16.13.1"
   },
