@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { createPathObjectStringByPathList } from '../src/core'
 
-describe('only one file (ts)', () => {
+describe.concurrent('only one file (ts)', () => {
   it('posts/index.svelte', () => {
     expect(createPathObjectStringByPathList(['posts/index.svelte'])).toEqual(
       'export const PATHS={posts:{index:`/posts`}}'
@@ -37,7 +37,7 @@ describe('only one file (ts)', () => {
   })
 })
 
-describe('base path', () => {
+describe.concurrent('base path', () => {
   it('multiple file (ts)', () => {
     expect(
       createPathObjectStringByPathList([

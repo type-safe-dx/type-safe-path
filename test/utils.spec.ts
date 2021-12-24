@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { deepMerge } from '../src/utils'
 
 describe('merge', () => {
-  describe('only object', () => {
+  describe.concurrent('only object', () => {
     it('simply', () => {
       expect(deepMerge({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 })
     })
