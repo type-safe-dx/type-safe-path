@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { createPathObjectStringByPathList } from '../src/core'
 
 describe('only one file (ts)', () => {
