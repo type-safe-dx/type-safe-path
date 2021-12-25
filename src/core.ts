@@ -28,8 +28,8 @@ export function createPathObjectStringByPathList(pathList: string[]): string {
     pathObject = deepMerge(pathObject, current)
   })
 
-  // remove double quotes or escaped double quotes in JSON to make valid JavaScript/TypeScript code.
-  return 'export const PATHS=' + JSON.stringify(pathObject).replace(/\\*"/g, '')
+  // remove double quotes in JSON to make valid JavaScript/TypeScript code.
+  return 'export const PATHS=' + JSON.stringify(pathObject).replace(/"/g, '')
 }
 
 /** @private */

@@ -9,7 +9,7 @@ export class ArrowFunction {
     return `(${this.argName}${this.opt.isTS ? ':string' : ''})=>${
       typeof this.returnObj === 'string'
         ? this.returnObj
-        : `(${JSON.stringify(this.returnObj)})`
+        : `(${JSON.stringify(this.returnObj).replace(/"/g, '')})`
     }`
   }
 }
