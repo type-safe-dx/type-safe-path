@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { deepMerge } from '../src/utils'
+import { ArrowFunction, deepMerge } from '../src/utils'
 
 describe('merge', () => {
   describe.concurrent('only object', () => {
@@ -14,6 +14,16 @@ describe('merge', () => {
     it('different key size', () => {
       expect(deepMerge({ a: 1 }, { b: 2, c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
       expect(deepMerge({ a: 1, b: 2 }, { c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
+    })
+    it('ArrowFunction', () => {
+      expect(
+        JSON.stringify(
+          deepMerge(
+            new ArrowFunction('foo', { a: 1 }),
+            new ArrowFunction('foo', { b: 2 })
+          )
+        )
+      ).toEqual(`"(foo:string)=>({a:1,b:2})"`)
     })
   })
 })
