@@ -1,7 +1,7 @@
 export class ArrowFunction {
   constructor(
     public argName: string,
-    public returnObj: Record<string, unknown>,
+    public returnObj: Record<string, unknown> | string,
     public opt: { isTS: boolean } = { isTS: true }
   ) {}
 
