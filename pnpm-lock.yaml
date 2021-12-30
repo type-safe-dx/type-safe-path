@@ -14,7 +14,7 @@ specifiers:
   tiny-glob: 0.2.9
   ts-node: 10.4.0
   typescript: 4.5.4
-  vite: 2.7.6
+  vite: 2.7.10
   vitest: 0.0.113
 
 dependencies:
@@ -33,8 +33,8 @@ devDependencies:
   prettier: 2.5.1
   ts-node: 10.4.0_d0eef7d48f2063e87802f700404a1b3b
   typescript: 4.5.4
-  vite: 2.7.6
-  vitest: 0.0.113_vite@2.7.6
+  vite: 2.7.10
+  vitest: 0.0.113_vite@2.7.10
 
 packages:
 
@@ -1333,8 +1333,8 @@ packages:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
 
-  /vite/2.7.6:
-    resolution: {integrity: sha512-PBNoc87rDYLtkpFU9dbVeGdbcyKzz6c34oScqivE3FEa3BhVa4ASupCzcz0eDIiSECovfLcQnLUJt9vhiEU08g==}
+  /vite/2.7.10:
+    resolution: {integrity: sha512-KEY96ntXUid1/xJihJbgmLZx7QSC2D4Tui0FdS0Old5OokYzFclcofhtxtjDdGOk/fFpPbHv9yw88+rB93Tb8w==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -1357,7 +1357,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.0.113_vite@2.7.6:
+  /vitest/0.0.113_vite@2.7.10:
     resolution: {integrity: sha512-GRIZqFEkR0uGddoSp9uyevkS6GEMRZtIX1laCvsnsnrz3tAKR/RTLPjXBqXhFZwjueUDRyJEwD4KGD+1KXOsgw==}
     engines: {node: '>=14.14.0'}
     hasBin: true
@@ -1380,7 +1380,7 @@ packages:
       local-pkg: 0.4.0
       tinypool: 0.0.6
       tinyspy: 0.2.6
-      vite: 2.7.6
+      vite: 2.7.10
     dev: true
 
   /which/2.0.2:
