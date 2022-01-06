@@ -15,7 +15,7 @@ specifiers:
   ts-node: 10.4.0
   typescript: 4.5.4
   vite: 2.7.10
-  vitest: 0.0.133
+  vitest: 0.0.136
 
 dependencies:
   kleur: 4.1.4
@@ -34,7 +34,7 @@ devDependencies:
   ts-node: 10.4.0_d0eef7d48f2063e87802f700404a1b3b
   typescript: 4.5.4
   vite: 2.7.10
-  vitest: 0.0.133
+  vitest: 0.0.136
 
 packages:
 
@@ -1363,8 +1363,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.0.133:
-    resolution: {integrity: sha512-x83CeRPW1FNTY1pQ8CTPH4dbyvZc67ycqnqYpU/xxg6snnAcB25GRZh39RyOeMVHEczB2SeGcA/fzP1D8eUvzw==}
+  /vitest/0.0.136:
+    resolution: {integrity: sha512-l/FByRw+GNIckkAKMUib8HF5K+U3vmlrBOIl2ugt2FtMPvxSCKmRrbZWPmo3bbMzK1dekqSLILFp0v8WjNS5Lg==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
