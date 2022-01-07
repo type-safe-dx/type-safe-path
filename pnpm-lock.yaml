@@ -14,7 +14,7 @@ specifiers:
   tiny-glob: 0.2.9
   typescript: 4.5.4
   vite: 2.7.10
-  vitest: 0.0.138
+  vitest: 0.0.139
 
 dependencies:
   kleur: 4.1.4
@@ -32,7 +32,7 @@ devDependencies:
   prettier: 2.5.1
   typescript: 4.5.4
   vite: 2.7.10
-  vitest: 0.0.138
+  vitest: 0.0.139
 
 packages:
 
@@ -1275,8 +1275,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.0.138:
-    resolution: {integrity: sha512-AuCIKr5+oDWKCYbk14vl2VlAZ1V5Vjq8S80ZkpAQPsIRzgomoWOXzY1NVI+B8itXhz+Dznw34JcaeVXB/+/mrA==}
+  /vitest/0.0.139:
+    resolution: {integrity: sha512-5AXMaEOJXgQpobgXkzBPGP8o4NpAhT2yczeRD1V94U0VWGxRObI1zjqtxBPEtgda8Q4rQKw0SVlHCR0P76h9QA==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
