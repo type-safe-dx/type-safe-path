@@ -27,4 +27,4 @@ export const PATHS = {
 - [ ] Make it configurable (enough to adapt any frameworks, such as Next, Nuxt, SvelteKit, etc.)
 - [ ] Increase coverage
 
-This library is inspired by https://github.com/aspida/aspida
+This library is inspired by https://github.com/aspida/pathpida
