@@ -12,6 +12,7 @@ jobs:
         node-version:
           - 14.x
           - 16.x
+          - 17.x
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@v2.0.1
