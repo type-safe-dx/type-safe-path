@@ -15,12 +15,12 @@ jobs:
           - 17.x
     steps:
       - uses: actions/checkout@v2
+      - run: corepack enable
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint:check
       - run: pnpm tsc --noEmit
