@@ -24,7 +24,9 @@ export const PATHS = {
 
 ## TODO
 
-- [ ] Make it configurable (enough to adapt any frameworks, such as Next, Nuxt, SvelteKit, etc.)
+- [x] Make it configurable (enough to adapt any frameworks, such as Next, Nuxt, SvelteKit, etc.)
 - [ ] Increase coverage
+- [ ] Implement cli
+- [ ] Documentation
 
 This library is inspired by https://github.com/aspida/pathpida
