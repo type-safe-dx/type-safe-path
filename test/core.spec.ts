@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { defaultConfig } from '../src/config'
 import { createPathObjectStringByPathList } from '../src/core'
 
 describe.concurrent('only one file (ts)', () => {
@@ -59,13 +60,44 @@ describe.concurrent('base path', () => {
       'export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}'
     )
   })
+})
 
-  it('ignore file by config.ignorePattern', () => {
+describe.concurrent('ignore file', () => {
+  it('default ignorePattern', () => {
     expect(
       createPathObjectStringByPathList([
         'posts/index.svelte',
         'posts/_components/PostInfo.svelte',
       ])
     ).toEqual('export const PATHS={posts:{index:`/posts`}}')
+  })
+
+  it('customized ignorePattern', () => {
+    expect(
+      createPathObjectStringByPathList(
+        ['posts/index.svelte', 'posts/$components/PostInfo.svelte'],
+        {
+          ...defaultConfig,
+          ignorePattern: /^\$.*/,
+        }
+      )
+    ).toEqual('export const PATHS={posts:{index:`/posts`}}')
+  })
+})
+
+describe.concurrent('dynamicPattern config', () => {
+  it('customized', () => {
+    const customizedConfig = {
+      ignorePattern: null,
+      dynamicPattern: /^_(\w+)/,
+    }
+    expect(
+      createPathObjectStringByPathList(
+        ['posts/_id/index.svelte'],
+        customizedConfig
+      )
+    ).toEqual(
+      'export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}'
+    )
   })
 })
