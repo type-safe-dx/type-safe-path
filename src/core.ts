@@ -15,11 +15,11 @@ export function createPathObjectStringByPathList(
     if (path.startsWith('/')) path = path.slice(1)
 
     const segments = path.split('/')
+
+    const { ignorePattern } = config
     if (
-      segments.some(
-        (segment) =>
-          config.ignorePattern && new RegExp(config.ignorePattern).test(segment)
-      )
+      ignorePattern &&
+      segments.some((segment) => new RegExp(ignorePattern).test(segment))
     ) {
       return
     }
