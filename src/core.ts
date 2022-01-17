@@ -24,12 +24,17 @@ export function createPathObjectStringByPathList(
     let current: any =
       '`/' +
       omitExtension(path)
-        .replace(/\[(\w+)\]/g, '${$1}')
+        .split('/')
+        .map((segment) =>
+          segment.replace(new RegExp(config.dynamicPattern, 'g'), '${$1}')
+        )
+        .join('/')
         .replace(/\/index$/, '') +
       '`'
 
     segments.reverse().forEach((segment) => {
-      if (isDynamicSegment(omitExtension(segment))) {
+      if (new RegExp(config.dynamicPattern).test(segment)) {
+        // is dynamic segment e.g. [postId]
         const param = omitExtension(segment).slice(1, -1)
         current = { [param]: new ArrowFunction(param, current) }
       } else {
@@ -47,9 +52,4 @@ export function createPathObjectStringByPathList(
 function omitExtension(str: string) {
   if (!str.includes('.')) return str
   return str.replace(/(.*)\..*/, '$1')
-}
-
-/** @private */
-function isDynamicSegment(segment: string) {
-  return /^\[\w+\]$/.test(segment)
 }
