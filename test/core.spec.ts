@@ -59,4 +59,13 @@ describe.concurrent('base path', () => {
       'export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}'
     )
   })
+
+  it('ignore file by config.ignorePattern', () => {
+    expect(
+      createPathObjectStringByPathList([
+        'posts/index.svelte',
+        'posts/_components/PostInfo.svelte',
+      ])
+    ).toEqual('export const PATHS={posts:{index:`/posts`}}')
+  })
 })
