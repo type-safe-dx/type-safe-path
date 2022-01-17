@@ -1,5 +1,7 @@
 # type-safe-path
 
+[![codecov](https://codecov.io/gh/KoichiKiyokawa/type-safe-path/branch/main/graph/badge.svg?token=61F6FRPXKN)](https://codecov.io/gh/KoichiKiyokawa/type-safe-path)
+
 ```
 pages/
   └── posts/
@@ -25,7 +27,8 @@ export const PATHS = {
 ## TODO
 
 - [x] Make it configurable (enough to adapt any frameworks, such as Next, Nuxt, SvelteKit, etc.)
-- [ ] Increase coverage
+- [x] Increase coverage
+- [ ] Handle query type
 - [ ] Implement cli
 - [ ] Documentation
 
