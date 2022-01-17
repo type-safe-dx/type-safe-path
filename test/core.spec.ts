@@ -88,7 +88,6 @@ describe.concurrent('ignore file', () => {
 describe.concurrent('dynamicPattern config', () => {
   it('customized', () => {
     const customizedConfig = {
-      ignorePattern: null,
       dynamicPattern: /^_(\w+)/,
     }
     expect(
@@ -99,5 +98,9 @@ describe.concurrent('dynamicPattern config', () => {
     ).toEqual(
       'export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}'
     )
+
+    expect(
+      createPathObjectStringByPathList(['posts/_id.svelte'], customizedConfig)
+    ).toEqual('export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}')
   })
 })

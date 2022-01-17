@@ -1,5 +1,5 @@
 export interface Config {
-  ignorePattern: string | RegExp
+  ignorePattern?: string | RegExp
   dynamicPattern: string | RegExp
 }
 

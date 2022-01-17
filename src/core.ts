@@ -38,7 +38,7 @@ export function createPathObjectStringByPathList(
     segments.reverse().forEach((segment) => {
       if (new RegExp(config.dynamicPattern).test(segment)) {
         // is dynamic segment e.g. [postId]
-        const param = omitExtension(segment).slice(1, -1)
+        const [, param] = segment.match(new RegExp(config.dynamicPattern)) ?? []
         current = { [param]: new ArrowFunction(param, current) }
       } else {
         current = { [omitExtension(segment)]: current }
