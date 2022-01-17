@@ -1,6 +1,5 @@
 import { Config, defaultConfig } from './config'
 import { deepMerge, ArrowFunction } from './utils'
-const EXTENSIONS = ['svelte'].map((ext) => `.${ext}`)
 
 /**
  * @param pathList e.g. posts/index.svelte
@@ -24,17 +23,17 @@ export function createPathObjectStringByPathList(
 
     let current: any =
       '`/' +
-      omitExtensions(path)
+      omitExtension(path)
         .replace(/\[(\w+)\]/g, '${$1}')
         .replace(/\/index$/, '') +
       '`'
 
     segments.reverse().forEach((segment) => {
-      if (isDynamicSegment(omitExtensions(segment))) {
-        const param = omitExtensions(segment).slice(1, -1)
+      if (isDynamicSegment(omitExtension(segment))) {
+        const param = omitExtension(segment).slice(1, -1)
         current = { [param]: new ArrowFunction(param, current) }
       } else {
-        current = { [omitExtensions(segment)]: current }
+        current = { [omitExtension(segment)]: current }
       }
     })
     pathObject = deepMerge(pathObject, current)
@@ -45,8 +44,9 @@ export function createPathObjectStringByPathList(
 }
 
 /** @private */
-function omitExtensions(str: string) {
-  return str.replace(new RegExp(EXTENSIONS.join('|')), '')
+function omitExtension(str: string) {
+  if (!str.includes('.')) return str
+  return str.replace(/(.*)\..*/, '$1')
 }
 
 /** @private */
