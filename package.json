@@ -32,8 +32,5 @@
     "singleQuote": true,
     "semi": false
   },
-  "volta": {
-    "node": "16.14.0"
-  },
   "packageManager": "pnpm@6.31.0"
 }
