@@ -14,7 +14,7 @@ specifiers:
   prettier: 2.6.0
   tiny-glob: 0.2.9
   typescript: 4.6.2
-  vitest: 0.7.4
+  vitest: 0.7.6
 
 dependencies:
   kleur: 4.1.4
@@ -32,7 +32,7 @@ devDependencies:
   eslint-config-prettier: 8.5.0_eslint@8.11.0
   prettier: 2.6.0
   typescript: 4.6.2
-  vitest: 0.7.4_c8@7.11.0
+  vitest: 0.7.6_c8@7.11.0
 
 packages:
 
@@ -1492,8 +1492,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.7.4_c8@7.11.0:
-    resolution: {integrity: sha512-6kyJ/YZJFVj/zEVVHFyvLvAZlbg05yAyJrk7oP+FOCFanGRYK7bBEz4qsIpNHxX+dlf5vRkbBDjpdXzGL7udeA==}
+  /vitest/0.7.6_c8@7.11.0:
+    resolution: {integrity: sha512-fqk0cn0I2BUpzwLfeZ725JeXJ7WGwDtVcVBksQ6SdyjrBi6aex8t3w70TWgyLOXgylS7FJ8C9DRap4MMgpkqYw==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
