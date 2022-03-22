@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "kleur": "4.1.4",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "tiny-glob": "0.2.9"
   },
   "devDependencies": {
