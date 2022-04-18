@@ -1,12 +1,13 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      glob: '*.ts'
-      run: pnpm eslint --fix {staged_files} && pnpm prettier --write {staged_files}
+    # lint:
+    #   glob: '*.ts'
+    #   run: pnpm rome format {staged_files}
     type:
       glob: '*.ts'
       run: pnpm tsc --noEmit
     format:
-      glob: '*.{yml,yaml,md,json}'
-      run: pnpm prettier --write {staged_files}
+      # glob: '*.{yml,yaml,md,json,ts}'
+      glob: '*.{ts}'
+      run: pnpm rome format {staged_files}

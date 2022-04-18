@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "prepare": "lefthook install",
-    "lint:check": "eslint . --ignore-path .gitignore && prettier --check .",
-    "lint:fix": "eslint . --fix --ignore-path .gitignore && prettier --write .",
+    "lint:check": "pnpm lint:fix --ci",
+    "lint:fix": "rome format .",
     "test": "vitest --run --coverage"
   },
   "dependencies": {
@@ -22,9 +22,7 @@
     "@typescript-eslint/eslint-plugin": "5.19.0",
     "@typescript-eslint/parser": "5.19.0",
     "c8": "7.11.0",
-    "eslint": "8.13.0",
-    "eslint-config-prettier": "8.5.0",
-    "prettier": "2.6.2",
+    "rome": "0.4.2-next",
     "typescript": "4.6.3",
     "vitest": "0.9.3"
   },
