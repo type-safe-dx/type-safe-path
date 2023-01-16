@@ -13,13 +13,25 @@ pages/
 
 ```ts
 type PathToParams = {
-  posts: never,
-  'posts/[id]': {id: string | number}
+  posts: never
+  'posts/[id]': { id: string | number }
 }
 
 export function buildPath<Path extends keyof PathToParams>(
   path: Path,
-  ...params: PathToParams[Path] extends never ? [ params?: { searchParams?: Record<string, string | number>; hash?: string } ] : [ params: PathToParams[Path] & { searchParams?: Record<string, string | number>; hash?: string } ]
+  ...params: PathToParams[Path] extends never
+    ? [
+        params?: {
+          searchParams?: Record<string, string | number>
+          hash?: string
+        }
+      ]
+    : [
+        params: PathToParams[Path] & {
+          searchParams?: Record<string, string | number>
+          hash?: string
+        }
+      ]
 ): string {
   const [pathParams] = params
   if (pathParams === undefined) return path
@@ -34,12 +46,7 @@ export function buildPath<Path extends keyof PathToParams>(
 }
 ```
 
-
 https://user-images.githubusercontent.com/40315079/212696306-ed6c9f88-4641-4549-b539-f56fba4814d1.mp4
-
-
-
-
 
 ## TODO
 
