@@ -10,9 +10,9 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 14.x
           - 16.x
           - 17.x
+          - 18.x
     steps:
       - uses: actions/checkout@v3
       - run: corepack enable pnpm
@@ -25,4 +25,5 @@ jobs:
       - run: pnpm lint:check
       - run: pnpm tsc --noEmit
       - run: pnpm test
+      - run: pnpm test:typecheck
       - uses: codecov/codecov-action@v3.1.0
