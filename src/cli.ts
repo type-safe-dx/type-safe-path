@@ -14,8 +14,8 @@ prog
     try {
       const { run } = await import('./run')
       run({ configFilePath: opts.config })
-    } catch (e: any) {
-      console.log(kleur.red(e.message))
+    } catch (e) {
+      console.log(kleur.red((e as Error).message))
     }
   })
 

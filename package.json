@@ -21,7 +21,7 @@
     "test:coverage": "vitest --run --coverage"
   },
   "lint-staged": {
-    "*.{ts,yml,md,json}": [
+    "*.{ts}": [
       "rome format --write"
     ]
   },
