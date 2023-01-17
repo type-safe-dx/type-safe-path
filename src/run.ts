@@ -20,7 +20,10 @@ export function run({ configFilePath }: Option): void {
   const ignorePathList =
     config.ignoreGlob === undefined ? [] : glob(config.ignoreGlob, { cwd: config.routeDir })
 
-  createPathHelperFromPathList(pathList.filter((p) => !ignorePathList.includes(p)))
+  createPathHelperFromPathList(
+    pathList.filter((p) => !ignorePathList.includes(p)),
+    { dynamicSegmentPattern: config.dynamicSegmentPattern }
+  )
 }
 
 function autoDetectConfig(): Config {
@@ -34,7 +37,7 @@ function autoDetectConfig(): Config {
     }
 
     const routesGlob = routeDir.endsWith('app') ? '**/page.{tsx,ts,jsx,js}' : '**/*.{tsx,ts,jsx,js}'
-    return { routeDir, routesGlob }
+    return { routeDir, routesGlob, dynamicSegmentPattern: 'bracket' }
   }
 
   if (fs.existsSync('svelte.config.js')) {

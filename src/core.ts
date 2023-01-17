@@ -1,6 +1,8 @@
+import { Config } from './config'
+
 export function createPathHelperFromPathList(
   pathList: string[],
-  options: { dynamicSegmentPattern: 'bracket' | 'colon' | RegExp }
+  options: { dynamicSegmentPattern: Config['dynamicSegmentPattern'] }
 ) {
   const dynamicSegmentRegex =
     options.dynamicSegmentPattern === 'bracket'
