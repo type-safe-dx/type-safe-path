@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import jiti from 'jiti'
 import { Config } from './config'
-import { createPathHelperFromPathList } from './core'
+import { createPathHelper } from './core'
 import glob from 'tiny-glob/sync'
 
 type Option = { configFilePath: string | undefined }
@@ -20,7 +20,7 @@ export function run({ configFilePath }: Option): void {
   const ignorePathList =
     config.ignoreGlob === undefined ? [] : glob(config.ignoreGlob, { cwd: config.routeDir })
 
-  createPathHelperFromPathList(
+  createPathHelper(
     pathList.filter((p) => !ignorePathList.includes(p)),
     { dynamicSegmentPattern: config.dynamicSegmentPattern }
   )

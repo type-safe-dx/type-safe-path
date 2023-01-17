@@ -1,11 +1,19 @@
 {
   "name": "type-safe-path",
   "version": "0.0.0",
-  "main": "index.js",
   "license": "MIT",
-  "private": true,
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "bin": "dist/cli.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
   "scripts": {
     "prepare": "husky install",
+    "build": "unbuild",
     "lint:check": "eslint . --ignore-path .gitignore && prettier --check .",
     "lint:fix": "eslint . --fix --ignore-path .gitignore && prettier --write .",
     "test": "vitest",
@@ -40,6 +48,7 @@
     "prettier": "2.7.1",
     "tsx": "3.12.2",
     "typescript": "4.7.4",
+    "unbuild": "1.1.1",
     "vitest": "0.27.1"
   },
   "prettier": {

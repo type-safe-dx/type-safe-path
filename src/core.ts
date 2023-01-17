@@ -1,6 +1,6 @@
 import { Config } from './config'
 
-export function createPathHelperFromPathList(
+export function createPathHelper(
   pathList: string[],
   options: { dynamicSegmentPattern: Config['dynamicSegmentPattern'] }
 ) {
