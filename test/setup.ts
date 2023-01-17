@@ -1,5 +1,6 @@
 import { createPathHelper } from '../src/core'
 import fs from 'fs'
+import { execSync } from 'child_process'
 
 export function setup() {
   fs.writeFileSync(
@@ -14,4 +15,5 @@ export function setup() {
       dynamicSegmentPattern: 'colon',
     }),
   )
+  execSync('pnpm rome format --write test/generated')
 }
