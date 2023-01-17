@@ -6,7 +6,7 @@ describe('createPathHelperFromPathList', () => {
     expect(
       createPathHelper(['about', 'posts/[id]/comments/[commentId]'], {
         dynamicSegmentPattern: 'bracket',
-      })
+      }),
     ).toMatchInlineSnapshot(`
       "// prettier-ignore
       // This file is auto generated. DO NOT EDIT
@@ -63,7 +63,7 @@ describe('createPathHelperFromPathList', () => {
     expect(
       createPathHelper(['about', 'posts/:id/comments/:commentId'], {
         dynamicSegmentPattern: 'colon',
-      })
+      }),
     ).toMatchInlineSnapshot(`
       "// prettier-ignore
       // This file is auto generated. DO NOT EDIT

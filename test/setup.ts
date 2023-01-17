@@ -6,12 +6,12 @@ export function setup() {
     'test/generated/bracket/output.ts',
     createPathHelper(['about', 'posts/[id]/comments/[commentId]'], {
       dynamicSegmentPattern: 'bracket',
-    })
+    }),
   )
   fs.writeFileSync(
     'test/generated/colon/output.ts',
     createPathHelper(['about', 'posts/:id/comments/:commentId'], {
       dynamicSegmentPattern: 'colon',
-    })
+    }),
   )
 }

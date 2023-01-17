@@ -8,7 +8,7 @@ import { deepMerge, ArrowFunction } from './utils'
  */
 export function createPathObjectStringByPathList(
   pathList: string[],
-  config: Config = defaultConfig
+  config: Config = defaultConfig,
 ): string {
   let pathObject: Record<string, any> = {}
   pathList.forEach((path) => {

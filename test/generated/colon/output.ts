@@ -2,8 +2,8 @@
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
-  about: never,
-	'posts/:id/comments/:commentId': {id: string | number, commentId: string | number}
+  about: never
+  'posts/:id/comments/:commentId': { id: string | number; commentId: string | number }
 }
 
 /**
@@ -17,13 +17,13 @@ export function buildPath<Path extends keyof PathToParams>(
         params?: {
           searchParams?: Record<string, string | number>
           hash?: string
-        }
+        },
       ]
     : [
         params: PathToParams[Path] & {
           searchParams?: Record<string, string | number>
           hash?: string
-        }
+        },
       ]
 ): string {
   const [pathParams] = params

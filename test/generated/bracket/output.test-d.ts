@@ -9,14 +9,14 @@ test('valid', () => {
       id: 1,
       commentId: 1,
       searchParams: { q: 'foo' },
-    })
+    }),
   )
   assertType(
     buildPath('posts/[id]/comments/[commentId]', {
       id: 1,
       commentId: 1,
       hash: 'section',
-    })
+    }),
   )
   assertType(
     buildPath('posts/[id]/comments/[commentId]', {
@@ -24,7 +24,7 @@ test('valid', () => {
       commentId: 1,
       searchParams: { q: 1 },
       hash: 'section',
-    })
+    }),
   )
 
   assertType(buildPath('about'))

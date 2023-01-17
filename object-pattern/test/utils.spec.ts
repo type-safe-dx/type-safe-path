@@ -18,8 +18,8 @@ describe('merge', () => {
     it('ArrowFunction', () => {
       expect(
         JSON.stringify(
-          deepMerge(new ArrowFunction('foo', { a: 1 }), new ArrowFunction('foo', { b: 2 }))
-        )
+          deepMerge(new ArrowFunction('foo', { a: 1 }), new ArrowFunction('foo', { b: 2 })),
+        ),
       ).toEqual(`"(foo:string)=>({a:1,b:2})"`)
     })
   })

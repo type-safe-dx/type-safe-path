@@ -14,47 +14,33 @@
   "scripts": {
     "prepare": "husky install",
     "build": "unbuild",
-    "lint:check": "eslint . --ignore-path .gitignore && prettier --check .",
-    "lint:fix": "eslint . --fix --ignore-path .gitignore && prettier --write .",
+    "lint:check": "rome check .",
+    "lint:fix": "rome format --write .",
     "test": "vitest",
     "test:typecheck": "vitest typecheck",
     "test:coverage": "vitest --run --coverage"
   },
   "lint-staged": {
     "*.{ts,yml,md,json}": [
-      "prettier --write"
-    ],
-    "*.ts": [
-      "eslint --fix"
+      "rome format --write"
     ]
   },
   "dependencies": {
     "jiti": "1.16.2",
     "kleur": "4.1.5",
-    "minimist": "1.2.6",
     "sade": "1.8.1",
     "tiny-glob": "0.2.9"
   },
   "devDependencies": {
-    "@types/minimist": "1.2.2",
     "@types/node": "18.6.4",
-    "@typescript-eslint/eslint-plugin": "5.32.0",
-    "@typescript-eslint/parser": "5.32.0",
     "c8": "7.12.0",
-    "eslint": "8.21.0",
-    "eslint-config-prettier": "8.5.0",
     "husky": "^8.0.0",
     "lint-staged": "13.1.0",
-    "prettier": "2.7.1",
+    "rome": "11.0.0",
     "tsx": "3.12.2",
     "typescript": "4.7.4",
     "unbuild": "1.1.1",
     "vitest": "0.27.1"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "semi": false,
-    "printWidth": 100
   },
   "packageManager": "pnpm@7.8.0"
 }

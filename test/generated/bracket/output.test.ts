@@ -8,7 +8,7 @@ test('build path with params, query, hash', () => {
       commentId: 2,
       searchParams: { q: 1 },
       hash: 'section',
-    })
+    }),
   ).toBe('posts/1/comments/2?q=1#section')
 })
 

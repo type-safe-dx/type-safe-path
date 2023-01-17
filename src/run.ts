@@ -22,7 +22,7 @@ export function run({ configFilePath }: Option): void {
 
   createPathHelper(
     pathList.filter((p) => !ignorePathList.includes(p)),
-    { dynamicSegmentPattern: config.dynamicSegmentPattern }
+    { dynamicSegmentPattern: config.dynamicSegmentPattern },
   )
 }
 
@@ -30,7 +30,7 @@ function autoDetectConfig(): Config {
   if (fs.existsSync('next.config.js')) {
     // Next.js
     const routeDir = ['src/app', 'src/pages', 'app', 'pages'].find((candidate) =>
-      fs.existsSync(candidate)
+      fs.existsSync(candidate),
     )
     if (routeDir === undefined) {
       throw Error('Cannot detect routeDir.\nThere are no src/app, src/pages, app or pages.')
