@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { createPathHelperFromPathList } from '.'
+import { createPathHelperFromPathList } from './core'
 
 describe('createPathHelperFromPathList', () => {
   it('normal', () => {
-    expect(
-      createPathHelperFromPathList(['about', 'posts/[id]/comments/[commentId]'])
-    ).toMatchInlineSnapshot(`
+    expect(createPathHelperFromPathList(['about', 'posts/[id]/comments/[commentId]']))
+      .toMatchInlineSnapshot(`
       "// prettier-ignore
       // This file is auto generated. DO NOT EDIT
 

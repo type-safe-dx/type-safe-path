@@ -3,9 +3,7 @@ export function createPathHelperFromPathList(pathList: string[]) {
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
-  ${pathList
-    .map((p) => createTypeDefinitionRowFromPath(filePathToUrlPath(p)))
-    .join(',\n\t')}
+  ${pathList.map((p) => createTypeDefinitionRowFromPath(filePathToUrlPath(p))).join(',\n\t')}
 }
 
 /**
@@ -66,13 +64,9 @@ function filePathToUrlPath(filePath: string) {
 function createTypeDefinitionRowFromPath(path: string): string {
   const pathForKey = filePathToUrlPath(path)
 
-  const params = path
-    .match(/\[(\w+)\]/g)
-    ?.map((m) => m.replace(/\[(\w+)\]/, '$1'))
+  const params = path.match(/\[(\w+)\]/g)?.map((m) => m.replace(/\[(\w+)\]/, '$1'))
 
   if (params === undefined) return `${pathForKey}: never`
 
-  return `'${pathForKey}': {${params
-    .map((param) => `${param}: string | number`)
-    .join(', ')}}`
+  return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(', ')}}`
 }
