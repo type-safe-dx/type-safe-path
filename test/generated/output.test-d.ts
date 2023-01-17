@@ -3,9 +3,7 @@ import { test, assertType } from 'vitest'
 import { buildPath } from './output'
 
 test('valid', () => {
-  assertType(
-    buildPath('posts/[id]/comments/[commentId]', { id: 1, commentId: 1 })
-  )
+  assertType(buildPath('posts/[id]/comments/[commentId]', { id: 1, commentId: 1 }))
   assertType(
     buildPath('posts/[id]/comments/[commentId]', {
       id: 1,
@@ -31,9 +29,7 @@ test('valid', () => {
 
   assertType(buildPath('about'))
   assertType(buildPath('about', { searchParams: { q: 'foo' } }))
-  assertType(
-    buildPath('about', { searchParams: { q: 'foo', hash: 'section' } })
-  )
+  assertType(buildPath('about', { searchParams: { q: 'foo', hash: 'section' } }))
 })
 
 test('invalid', () => {

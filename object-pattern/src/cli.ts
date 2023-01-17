@@ -20,9 +20,7 @@ Example: tsp "src/routes/**" -o src/paths.ts
   const outputPath = argv.o || argv.out
 
   if (!outputPath) {
-    return console.error(
-      red('-o or --out is required for specifying output path')
-    )
+    return console.error(red('-o or --out is required for specifying output path'))
   }
 
   const pathList = glob(targetRegex)

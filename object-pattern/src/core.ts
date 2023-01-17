@@ -17,10 +17,7 @@ export function createPathObjectStringByPathList(
     const segments = path.split('/')
 
     const { ignorePattern } = config
-    if (
-      ignorePattern &&
-      segments.some((segment) => new RegExp(ignorePattern).test(segment))
-    ) {
+    if (ignorePattern && segments.some((segment) => new RegExp(ignorePattern).test(segment))) {
       return
     }
 
@@ -28,9 +25,7 @@ export function createPathObjectStringByPathList(
       '`/' +
       omitExtension(path)
         .split('/')
-        .map((segment) =>
-          segment.replace(new RegExp(config.dynamicPattern, 'g'), '${$1}')
-        )
+        .map((segment) => segment.replace(new RegExp(config.dynamicPattern, 'g'), '${$1}'))
         .join('/')
         .replace(/\/index$/, '') +
       '`'

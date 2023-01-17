@@ -19,10 +19,7 @@ export function deepMerge(
   objB: Record<string, any>
 ): Record<string, any> {
   for (const key in objB) {
-    if (
-      objA[key] instanceof ArrowFunction &&
-      objB[key] instanceof ArrowFunction
-    ) {
+    if (objA[key] instanceof ArrowFunction && objB[key] instanceof ArrowFunction) {
       if (objA[key].argName === objB[key].argName) {
         objA[key] = new ArrowFunction(
           objA[key].argName,

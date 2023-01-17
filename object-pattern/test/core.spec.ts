@@ -16,9 +16,7 @@ describe.concurrent('only one file (ts)', () => {
   })
 
   it('posts/[id]/index.svelte', () => {
-    expect(
-      createPathObjectStringByPathList(['posts/[id]/index.svelte'])
-    ).toEqual(
+    expect(createPathObjectStringByPathList(['posts/[id]/index.svelte'])).toEqual(
       'export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}'
     )
   })
@@ -30,9 +28,7 @@ describe.concurrent('only one file (ts)', () => {
   })
 
   it('posts/[id]/edit.svelte', () => {
-    expect(
-      createPathObjectStringByPathList(['posts/[id]/edit.svelte'])
-    ).toEqual(
+    expect(createPathObjectStringByPathList(['posts/[id]/edit.svelte'])).toEqual(
       'export const PATHS={posts:{id:(id:string)=>({edit:`/posts/${id}/edit`})}}'
     )
   })
@@ -53,9 +49,7 @@ describe.concurrent('base path', () => {
 
   it('nested file (ts)', () => {
     expect(
-      createPathObjectStringByPathList([
-        'posts/[postId]/comments/[commentId]/index.svelte',
-      ])
+      createPathObjectStringByPathList(['posts/[postId]/comments/[commentId]/index.svelte'])
     ).toEqual(
       'export const PATHS={posts:{postId:(postId:string)=>({comments:{commentId:(commentId:string)=>({index:`/posts/${postId}/comments/${commentId}`})}})}}'
     )
@@ -65,10 +59,7 @@ describe.concurrent('base path', () => {
 describe.concurrent('ignore file', () => {
   it('default ignorePattern', () => {
     expect(
-      createPathObjectStringByPathList([
-        'posts/index.svelte',
-        'posts/_components/PostInfo.svelte',
-      ])
+      createPathObjectStringByPathList(['posts/index.svelte', 'posts/_components/PostInfo.svelte'])
     ).toEqual('export const PATHS={posts:{index:`/posts`}}')
   })
 
@@ -90,17 +81,12 @@ describe.concurrent('dynamicPattern config', () => {
     const customizedConfig = {
       dynamicPattern: /^_(\w+)/,
     }
-    expect(
-      createPathObjectStringByPathList(
-        ['posts/_id/index.svelte'],
-        customizedConfig
-      )
-    ).toEqual(
+    expect(createPathObjectStringByPathList(['posts/_id/index.svelte'], customizedConfig)).toEqual(
       'export const PATHS={posts:{id:(id:string)=>({index:`/posts/${id}`})}}'
     )
 
-    expect(
-      createPathObjectStringByPathList(['posts/_id.svelte'], customizedConfig)
-    ).toEqual('export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}')
+    expect(createPathObjectStringByPathList(['posts/_id.svelte'], customizedConfig)).toEqual(
+      'export const PATHS={posts:{id:(id:string)=>`/posts/${id}`}}'
+    )
   })
 })
