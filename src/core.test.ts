@@ -40,7 +40,7 @@ describe('createPathHelperFromPathList', () => {
         if (pathParams === undefined) return path
 
         return (
-          path.replace(/\\\\[(\\\\w+?)\\\\]/g, (_, key) => pathParams[key]) +
+          path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => pathParams[key]) +
           (pathParams.searchParams
             ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
             : '') +
@@ -70,7 +70,7 @@ describe('createPathHelperFromPathList', () => {
 
       type PathToParams = {
         about: never,
-      	posts/:id/comments/:commentId: never
+      	'posts/:id/comments/:commentId': {id: string | number, commentId: string | number}
       }
 
       /**
@@ -97,7 +97,7 @@ describe('createPathHelperFromPathList', () => {
         if (pathParams === undefined) return path
 
         return (
-          path.replace(/:(\\\\w+?)/g, (_, key) => pathParams[key]) +
+          path.replace(/:(\\\\w+)/g, (_, key) => pathParams[key]) +
           (pathParams.searchParams
             ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
             : '') +

@@ -4,16 +4,18 @@ export function createPathHelperFromPathList(
 ) {
   const dynamicSegmentRegex =
     options.dynamicSegmentPattern === 'bracket'
-      ? /\[(\w+?)\]/g
+      ? /\[(\w+)\]/
       : options.dynamicSegmentPattern === 'colon'
-      ? /:(\w+?)/g
+      ? /:(\w+)/
       : options.dynamicSegmentPattern
 
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
-  ${pathList.map((p) => createTypeDefinitionRowFromPath(filePathToUrlPath(p))).join(',\n\t')}
+  ${pathList
+    .map((p) => createTypeDefinitionRow(filePathToUrlPath(p), dynamicSegmentRegex))
+    .join(',\n\t')}
 }
 
 /**
@@ -40,7 +42,7 @@ export function buildPath<Path extends keyof PathToParams>(
   if (pathParams === undefined) return path
 
   return (
-    path.replace(${dynamicSegmentRegex}, (_, key) => pathParams[key]) +
+    path.replace(${new RegExp(dynamicSegmentRegex, 'g')}, (_, key) => pathParams[key]) +
     (pathParams.searchParams
       ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
       : '') +
@@ -71,10 +73,13 @@ function filePathToUrlPath(filePath: string) {
  * e.g. posts/[id]/index.tsx => 'posts/[id]: { id: string | number }
  * e.g. about.tsx => 'about': never
  */
-function createTypeDefinitionRowFromPath(path: string): string {
+function createTypeDefinitionRow(path: string, dynamicSegmentRegex: RegExp): string {
   const pathForKey = filePathToUrlPath(path)
-  const params = path.match(/\[(\w+)\]/g)?.map((m) => m.replace(/\[(\w+)\]/, '$1'))
-  if (params === undefined) return `${pathForKey}: never`
+  const params = path
+    .split('/')
+    .filter((p) => dynamicSegmentRegex.test(p))
+    .map((m) => m.replace(dynamicSegmentRegex, '$1'))
+  if (params.length === 0) return `${pathForKey}: never`
 
   return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(', ')}}`
 }
