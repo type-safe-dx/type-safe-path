@@ -1,4 +1,14 @@
-export function createPathHelperFromPathList(pathList: string[]) {
+export function createPathHelperFromPathList(
+  pathList: string[],
+  options: { dynamicSegmentPattern: 'bracket' | 'colon' | RegExp }
+) {
+  const dynamicSegmentRegex =
+    options.dynamicSegmentPattern === 'bracket'
+      ? /\[(\w+?)\]/g
+      : options.dynamicSegmentPattern === 'colon'
+      ? /:(\w+?)/g
+      : options.dynamicSegmentPattern
+
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
 
@@ -30,7 +40,7 @@ export function buildPath<Path extends keyof PathToParams>(
   if (pathParams === undefined) return path
 
   return (
-    path.replace(/\\[(\\w+)\\]/g, (_, key) => pathParams[key]) +
+    path.replace(${dynamicSegmentRegex}, (_, key) => pathParams[key]) +
     (pathParams.searchParams
       ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
       : '') +
@@ -63,9 +73,7 @@ function filePathToUrlPath(filePath: string) {
  */
 function createTypeDefinitionRowFromPath(path: string): string {
   const pathForKey = filePathToUrlPath(path)
-
   const params = path.match(/\[(\w+)\]/g)?.map((m) => m.replace(/\[(\w+)\]/, '$1'))
-
   if (params === undefined) return `${pathForKey}: never`
 
   return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(', ')}}`
