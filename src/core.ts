@@ -1,8 +1,9 @@
 import { Config } from "./config";
+import { defaultFilePathToRoutePath, normalizePath } from "./utils";
 
 export function createPathHelper(
   pathList: string[],
-  options: { dynamicSegmentPattern: Config["dynamicSegmentPattern"] },
+  options: Pick<Config, "dynamicSegmentPattern" | "filePathToRoutePath">,
 ) {
   const dynamicSegmentRegex =
     options.dynamicSegmentPattern === "bracket"
@@ -11,13 +12,17 @@ export function createPathHelper(
       ? /:(\w+)/
       : options.dynamicSegmentPattern;
 
+  const filePathToRoutePath = options.filePathToRoutePath || defaultFilePathToRoutePath;
+
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
   ${pathList
-    .map((p) => createTypeDefinitionRow(filePathToUrlPath(p), dynamicSegmentRegex))
-    .join(",\n\t")}
+    .map((p) =>
+      createTypeDefinitionRow(filePathToRoutePath(p), dynamicSegmentRegex, filePathToRoutePath),
+    )
+    .join(",\n  ")}
 }
 
 /**
@@ -62,26 +67,22 @@ export function rawPath<Path extends keyof PathToParams>(path: Path): string {
 `;
 }
 
-/** @private  */
-function filePathToUrlPath(filePath: string) {
-  return filePath
-    .replace(/\.\w+?$/, "") // posts/[id]/index.tsx => posts/[id]/index
-    .replace("/index", "") // posts/[id]/index => posts/[id]
-    .replace("index", "/"); // index => /
-}
-
 /**
  * @private
- * e.g. posts/[id]/index.tsx => 'posts/[id]: { id: string | number }
- * e.g. about.tsx => 'about': never
+ * e.g. posts/[id]/index.tsx => '/posts/[id]: { id: string | number }
+ * e.g. about.tsx => '/about': never
  */
-function createTypeDefinitionRow(path: string, dynamicSegmentRegex: RegExp): string {
-  const pathForKey = filePathToUrlPath(path);
+function createTypeDefinitionRow(
+  path: string,
+  dynamicSegmentRegex: RegExp,
+  filePathToRoutePath: (filePath: string) => string,
+): string {
+  const pathForKey = normalizePath(filePathToRoutePath(path));
   const params = path
     .split("/")
     .filter((p) => dynamicSegmentRegex.test(p))
     .map((m) => m.replace(dynamicSegmentRegex, "$1"));
-  if (params.length === 0) return `${pathForKey}: never`;
+  if (params.length === 0) return `'${pathForKey}': never`;
 
   return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(", ")}}`;
 }
