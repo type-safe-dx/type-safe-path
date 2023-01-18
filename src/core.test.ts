@@ -1,11 +1,11 @@
-import { describe, expect, it } from 'vitest'
-import { createPathHelper } from './core'
+import { describe, expect, it } from "vitest";
+import { createPathHelper } from "./core";
 
-describe('createPathHelperFromPathList', () => {
-  it('bracket', () => {
+describe("createPathHelperFromPathList", () => {
+  it("bracket", () => {
     expect(
-      createPathHelper(['about', 'posts/[id]/comments/[commentId]'], {
-        dynamicSegmentPattern: 'bracket',
+      createPathHelper(["about", "posts/[id]/comments/[commentId]"], {
+        dynamicSegmentPattern: "bracket",
       }),
     ).toMatchInlineSnapshot(`
       "// prettier-ignore
@@ -56,13 +56,13 @@ describe('createPathHelperFromPathList', () => {
         return path
       }
       "
-    `)
-  })
+    `);
+  });
 
-  it('colon', () => {
+  it("colon", () => {
     expect(
-      createPathHelper(['about', 'posts/:id/comments/:commentId'], {
-        dynamicSegmentPattern: 'colon',
+      createPathHelper(["about", "posts/:id/comments/:commentId"], {
+        dynamicSegmentPattern: "colon",
       }),
     ).toMatchInlineSnapshot(`
       "// prettier-ignore
@@ -113,6 +113,6 @@ describe('createPathHelperFromPathList', () => {
         return path
       }
       "
-    `)
-  })
-})
+    `);
+  });
+});

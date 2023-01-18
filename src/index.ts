@@ -1,2 +1,2 @@
-export { type Config, defineConfig } from './config'
-export { createPathHelper } from './core'
+export { type Config, defineConfig } from "./config";
+export { createPathHelper } from "./core";

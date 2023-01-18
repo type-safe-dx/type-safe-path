@@ -1,15 +1,15 @@
-import { Config } from './config'
+import { Config } from "./config";
 
 export function createPathHelper(
   pathList: string[],
-  options: { dynamicSegmentPattern: Config['dynamicSegmentPattern'] },
+  options: { dynamicSegmentPattern: Config["dynamicSegmentPattern"] },
 ) {
   const dynamicSegmentRegex =
-    options.dynamicSegmentPattern === 'bracket'
+    options.dynamicSegmentPattern === "bracket"
       ? /\[(\w+)\]/
-      : options.dynamicSegmentPattern === 'colon'
+      : options.dynamicSegmentPattern === "colon"
       ? /:(\w+)/
-      : options.dynamicSegmentPattern
+      : options.dynamicSegmentPattern;
 
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
@@ -17,7 +17,7 @@ export function createPathHelper(
 type PathToParams = {
   ${pathList
     .map((p) => createTypeDefinitionRow(filePathToUrlPath(p), dynamicSegmentRegex))
-    .join(',\n\t')}
+    .join(",\n\t")}
 }
 
 /**
@@ -44,7 +44,7 @@ export function buildPath<Path extends keyof PathToParams>(
   if (pathParams === undefined) return path
 
   return (
-    path.replace(${new RegExp(dynamicSegmentRegex, 'g')}, (_, key) => pathParams[key]) +
+    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => pathParams[key]) +
     (pathParams.searchParams
       ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
       : '') +
@@ -59,15 +59,15 @@ export function buildPath<Path extends keyof PathToParams>(
 export function rawPath<Path extends keyof PathToParams>(path: Path): string {
   return path
 }
-`
+`;
 }
 
 /** @private  */
 function filePathToUrlPath(filePath: string) {
   return filePath
-    .replace(/\.\w+?$/, '') // posts/[id]/index.tsx => posts/[id]/index
-    .replace('/index', '') // posts/[id]/index => posts/[id]
-    .replace('index', '/') // index => /
+    .replace(/\.\w+?$/, "") // posts/[id]/index.tsx => posts/[id]/index
+    .replace("/index", "") // posts/[id]/index => posts/[id]
+    .replace("index", "/"); // index => /
 }
 
 /**
@@ -76,12 +76,12 @@ function filePathToUrlPath(filePath: string) {
  * e.g. about.tsx => 'about': never
  */
 function createTypeDefinitionRow(path: string, dynamicSegmentRegex: RegExp): string {
-  const pathForKey = filePathToUrlPath(path)
+  const pathForKey = filePathToUrlPath(path);
   const params = path
-    .split('/')
+    .split("/")
     .filter((p) => dynamicSegmentRegex.test(p))
-    .map((m) => m.replace(dynamicSegmentRegex, '$1'))
-  if (params.length === 0) return `${pathForKey}: never`
+    .map((m) => m.replace(dynamicSegmentRegex, "$1"));
+  if (params.length === 0) return `${pathForKey}: never`;
 
-  return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(', ')}}`
+  return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(", ")}}`;
 }

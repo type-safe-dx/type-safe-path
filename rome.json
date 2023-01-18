@@ -8,13 +8,6 @@
   "linter": {
     "enabled": true
   },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "semicolons": "asNeeded",
-      "trailingComma": "all"
-    }
-  },
   "files": {
     "ignore": ["pnpm-lock.yaml", "dist", "coverage", "test/generated"]
   }

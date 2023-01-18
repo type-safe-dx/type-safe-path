@@ -1,19 +1,19 @@
-import { createPathHelper } from '../src/core'
-import fs from 'fs'
-import { execSync } from 'child_process'
+import { createPathHelper } from "../src/core";
+import fs from "fs";
+import { execSync } from "child_process";
 
 export function setup() {
   fs.writeFileSync(
-    'test/generated/bracket/output.ts',
-    createPathHelper(['about', 'posts/[id]/comments/[commentId]'], {
-      dynamicSegmentPattern: 'bracket',
+    "test/generated/bracket/output.ts",
+    createPathHelper(["about", "posts/[id]/comments/[commentId]"], {
+      dynamicSegmentPattern: "bracket",
     }),
-  )
+  );
   fs.writeFileSync(
-    'test/generated/colon/output.ts',
-    createPathHelper(['about', 'posts/:id/comments/:commentId'], {
-      dynamicSegmentPattern: 'colon',
+    "test/generated/colon/output.ts",
+    createPathHelper(["about", "posts/:id/comments/:commentId"], {
+      dynamicSegmentPattern: "colon",
     }),
-  )
-  execSync('pnpm rome format --write test/generated')
+  );
+  execSync("pnpm rome format --write test/generated");
 }
