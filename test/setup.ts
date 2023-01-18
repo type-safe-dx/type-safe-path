@@ -15,5 +15,4 @@ export function setup() {
       dynamicSegmentPattern: "colon",
     }),
   );
-  execSync("pnpm rome format --write test/generated");
 }
