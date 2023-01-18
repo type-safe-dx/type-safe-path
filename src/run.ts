@@ -3,13 +3,13 @@ import fs from "fs";
 import jiti from "jiti";
 import { Config } from "./config";
 import { createPathHelper } from "./core";
-import glob from "tiny-glob/sync";
+import glob from "tiny-glob";
 import { defaultFilePathToRoutePath, removePathExtension, removeSuffix } from "./utils";
 import kleur from "kleur";
 
 type Option = { configFilePath: string | undefined; output?: string };
 
-export function run({ configFilePath, output }: Option): void {
+export async function run({ configFilePath, output }: Option): Promise<void> {
   const config: Config =
     configFilePath === undefined
       ? autoDetectConfig()
@@ -18,9 +18,9 @@ export function run({ configFilePath, output }: Option): void {
           esmResolve: true,
         })(path.resolve("./tsp.config"));
 
-  const pathList = glob(config.routesGlob, { cwd: config.routeDir });
+  const pathList = await glob(config.routesGlob, { cwd: config.routeDir });
   const ignorePathList =
-    config.ignoreGlob === undefined ? [] : glob(config.ignoreGlob, { cwd: config.routeDir });
+    config.ignoreGlob === undefined ? [] : await glob(config.ignoreGlob, { cwd: config.routeDir });
 
   const pathHelper = createPathHelper(
     pathList.filter((p) => !ignorePathList.includes(p)),
@@ -38,7 +38,7 @@ function showDetectedResult(framework: string) {
 }
 
 function autoDetectConfig(): Config {
-  console.log("config file path is not specified, so we will auto detect the config");
+  console.log("Config file path is not specified, so we will auto detect the config");
   if (fs.existsSync("next.config.js")) {
     // Next.js
     showDetectedResult("Next.js");
@@ -59,6 +59,7 @@ function autoDetectConfig(): Config {
     return {
       routeDir,
       routesGlob,
+      ignoreGlob: "{_app,_document}.{tsx,ts,jsx,js}",
       dynamicSegmentPattern: "bracket",
       filePathToRoutePath,
     };

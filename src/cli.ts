@@ -13,7 +13,7 @@ prog
   .action(async (opts: { config: string; output: string }) => {
     try {
       const { run } = await import("./run");
-      run({ configFilePath: opts.config, output: opts.output });
+      await run({ configFilePath: opts.config, output: opts.output });
     } catch (e) {
       console.log(kleur.red((e as Error).message));
     }
