@@ -11,7 +11,7 @@ pages/
          └──[id].svelte
 ```
 
-↓ `tsp "src/pages/**" -o src/paths.ts`
+↓ `$ type-safe-path`
 
 ```ts
 type PathToParams = {
