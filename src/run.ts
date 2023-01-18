@@ -4,10 +4,12 @@ import jiti from "jiti";
 import { Config } from "./config";
 import { createPathHelper } from "./core";
 import glob from "tiny-glob/sync";
+import { defaultFilePathToRoutePath, removePathExtension, removeSuffix } from "./utils";
+import kleur from "kleur";
 
-type Option = { configFilePath: string | undefined };
+type Option = { configFilePath: string | undefined; output?: string };
 
-export function run({ configFilePath }: Option): void {
+export function run({ configFilePath, output }: Option): void {
   const config: Config =
     configFilePath === undefined
       ? autoDetectConfig()
@@ -20,15 +22,26 @@ export function run({ configFilePath }: Option): void {
   const ignorePathList =
     config.ignoreGlob === undefined ? [] : glob(config.ignoreGlob, { cwd: config.routeDir });
 
-  createPathHelper(
+  const pathHelper = createPathHelper(
     pathList.filter((p) => !ignorePathList.includes(p)),
     { dynamicSegmentPattern: config.dynamicSegmentPattern },
   );
+
+  const outputFilePath =
+    output ?? config.output ?? fs.existsSync("src") ? "src/path.ts" : "path.ts";
+  fs.writeFileSync(outputFilePath, pathHelper, "utf-8");
+  console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
+}
+
+function showDetectedResult(framework: string) {
+  console.log(`Detected framework: ${kleur.green(framework)}`);
 }
 
 function autoDetectConfig(): Config {
+  console.log("config file path is not specified, so we will auto detect the config");
   if (fs.existsSync("next.config.js")) {
     // Next.js
+    showDetectedResult("Next.js");
     const routeDir = ["src/app", "src/pages", "app", "pages"].find((candidate) =>
       fs.existsSync(candidate),
     );
@@ -36,15 +49,46 @@ function autoDetectConfig(): Config {
       throw Error("Cannot detect routeDir.\nThere are no src/app, src/pages, app or pages.");
     }
 
-    const routesGlob = routeDir.endsWith("app")
-      ? "**/page.{tsx,ts,jsx,js}"
-      : "**/*.{tsx,ts,jsx,js}";
-    return { routeDir, routesGlob, dynamicSegmentPattern: "bracket" };
+    const isAppDir = routeDir.endsWith("app");
+
+    const routesGlob = isAppDir ? "**/page.{tsx,ts,jsx,js}" : "**/*.{tsx,ts,jsx,js}";
+
+    const filePathToRoutePath = isAppDir
+      ? (f: string) => removeSuffix(removePathExtension(f), "page")
+      : defaultFilePathToRoutePath;
+    return {
+      routeDir,
+      routesGlob,
+      dynamicSegmentPattern: "bracket",
+      filePathToRoutePath,
+    };
+  }
+
+  if (["nuxt.config.ts", "nuxt.config.js"].some((c) => fs.existsSync(c))) {
+    // Nuxt3
+    showDetectedResult("Nuxt.js v3");
+    const routeDir = ["pages", "src/pages"].find((candidate) => fs.existsSync(candidate));
+    if (routeDir === undefined) {
+      throw Error("Cannot detect routeDir.\nThere are no src/app, src/pages, app or pages.");
+    }
+
+    return {
+      routeDir,
+      routesGlob: "**/*.vue",
+      dynamicSegmentPattern: "bracket",
+      filePathToRoutePath: (f: string) => removeSuffix(removePathExtension(f), "index"),
+    };
   }
 
   if (fs.existsSync("svelte.config.js")) {
     // SvelteKit
-    return {} as Config;
+    showDetectedResult("SvelteKit");
+    return {
+      routeDir: "src/routes",
+      routesGlob: "src/routes/**/+page.svelte",
+      dynamicSegmentPattern: "bracket",
+      filePathToRoutePath: (f: string) => removeSuffix(f, "+page.svelte"),
+    } as Config;
   }
 
   throw Error("Cannot detect any frameworks");

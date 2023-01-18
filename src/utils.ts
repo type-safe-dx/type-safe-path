@@ -12,7 +12,21 @@ export function normalizePath(path: string) {
 }
 
 export function defaultFilePathToRoutePath(filePath: string) {
-  return filePath
-    .replace(/\.\w+?$/, "") // posts/[id]/index.tsx => posts/[id]/index
-    .replace(/index$/, ""); // posts/[id]/index => posts/[id]/
+  return removeSuffix(removePathExtension(filePath), "index"); // posts/[id]/index.tsx => posts/[id]/index => posts/[id]
+}
+
+/**
+ * @example
+ * posts/[id]/index.tsx => posts/[id]/index
+ */
+export function removePathExtension(path: string): string {
+  return path.replace(/\.\w+?$/, "");
+}
+
+/**
+ * @example
+ * removeSuffix('/posts/index', 'index') // => '/posts/'
+ */
+export function removeSuffix(str: string, suffix: string): string {
+  return str.replace(new RegExp(`${suffix}$`), "");
 }
