@@ -16,6 +16,6 @@
     }
   },
   "files": {
-    "ignore": ["pnpm-lock.yaml", "dist", "coverage"]
+    "ignore": ["pnpm-lock.yaml", "dist", "coverage", "test/generated"]
   }
 }
