@@ -1,10 +1,13 @@
 {
-  "name": "type-safe-path",
-  "version": "0.0.0",
+  "name": "@kiyoshiro/type-safe-path",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "bin": "dist/cli.mjs",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -18,7 +21,8 @@
     "lint:fix": "rome format --write .",
     "test": "vitest",
     "test:typecheck": "vitest typecheck",
-    "test:coverage": "vitest --run --coverage"
+    "test:coverage": "vitest --run --coverage",
+    "prepublishOnly": "pnpm build"
   },
   "lint-staged": {
     "*.{ts}": [
