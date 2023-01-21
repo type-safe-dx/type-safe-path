@@ -59,9 +59,9 @@ export function buildPath<Path extends keyof PathToParams>(
 
 /**
  * @example
- * rawPath('posts/[id]') // => 'posts/[id]'
+ * echoPath('posts/[id]') // => 'posts/[id]'
  */
-export function rawPath<Path extends keyof PathToParams>(path: Path): string {
+export function echoPath<Path extends keyof PathToParams>(path: Path): string {
   return path
 }
 `;

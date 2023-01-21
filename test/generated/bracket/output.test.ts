@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { buildPath, rawPath } from './output'
+import { buildPath, echoPath } from './output'
 
 test('build path with params, query, hash', () => {
   expect(
@@ -12,6 +12,6 @@ test('build path with params, query, hash', () => {
   ).toBe('posts/1/comments/2?q=1#section')
 })
 
-test('rawPath should returns the argument', () => {
-  expect(rawPath('posts/[id]/comments/[commentId]')).toBe('posts/[id]/comments/[commentId]')
+test('echoPath should returns the argument', () => {
+  expect(echoPath('posts/[id]/comments/[commentId]')).toBe('posts/[id]/comments/[commentId]')
 })
