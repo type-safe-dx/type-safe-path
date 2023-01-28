@@ -49,7 +49,7 @@ export function buildPath<Path extends keyof PathToParams>(
   if (pathParams === undefined) return path
 
   return (
-    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => pathParams[key]) +
+    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => (pathParams as any)[key]) +
     (pathParams.searchParams
       ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
       : '') +
