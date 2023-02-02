@@ -11,7 +11,9 @@ npx type-safe-path // generate a path helper file
 
 ## Features
 
-TODO...
+- 🍃 Tiny runtime code
+- 🚀 Zero config (Currently supports Next, Nuxt3 and SvelteKit)
+- 🛠️️ Configurable for adapt any frameworks
 
 ## Abstract
 
