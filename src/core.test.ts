@@ -40,7 +40,7 @@ describe("createPathHelperFromPathList", () => {
         if (pathParams === undefined) return path
 
         return (
-          path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => pathParams[key]) +
+          path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => (pathParams as any)[key]) +
           (pathParams.searchParams
             ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
             : '') +
@@ -97,7 +97,7 @@ describe("createPathHelperFromPathList", () => {
         if (pathParams === undefined) return path
 
         return (
-          path.replace(/:(\\\\w+)/g, (_, key) => pathParams[key]) +
+          path.replace(/:(\\\\w+)/g, (_, key) => (pathParams as any)[key]) +
           (pathParams.searchParams
             ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
             : '') +
