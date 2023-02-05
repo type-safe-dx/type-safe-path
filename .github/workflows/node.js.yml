@@ -24,7 +24,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint:check
       - run: pnpm tsc --noEmit
-      - run: pnpm test
+      - run: pnpm test:coverage
       - run: pnpm test:typecheck
       - run: pnpm build
       - uses: codecov/codecov-action@v3.1.1
