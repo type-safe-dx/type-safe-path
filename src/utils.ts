@@ -12,7 +12,7 @@ export function normalizePath(path: string) {
 }
 
 export function defaultFilePathToRoutePath(filePath: string) {
-  return removeSuffix(removePathExtension(filePath), "index"); // posts/[id]/index.tsx => posts/[id]/index => posts/[id]
+  return removeSuffix(removePathExtension(filePath), "index"); // posts/[id]/index.tsx => posts/[id]/index => posts/[id]/
 }
 
 /**
