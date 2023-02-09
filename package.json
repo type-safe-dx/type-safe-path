@@ -1,29 +1,40 @@
 {
-  "name": "@kiyoshiro/type-safe-path",
-  "version": "0.0.3",
+  "name": "@kiyoshiro/zx-lite",
+  "version": "0.0.1-beta.0",
   "license": "MIT",
-  "main": "dist/index.cjs",
+  "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "bin": "dist/cli.mjs",
+  "bin": {
+    "zx-lite": "bin.js",
+    "zx": "bin.js"
+  },
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./globals": {
+      "import": "./dist/globals.js",
+      "types": "./dist/globals.d.ts"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "prepare": "husky install",
-    "build": "unbuild",
+    "build": "rm -rf dist && tsc",
     "lint:check": "rome check .",
     "lint:fix": "rome format --write .",
     "test": "vitest",
     "test:typecheck": "vitest typecheck",
     "test:coverage": "vitest --run --coverage",
     "prepublishOnly": "pnpm build",
-    "release": "bumpp package.json && pnpm publish"
+    "release": "tsc --noEmit && bumpp package.json && pnpm publish"
   },
   "lint-staged": {
     "*.{ts}": [
@@ -31,10 +42,9 @@
     ]
   },
   "dependencies": {
-    "jiti": "1.16.2",
-    "kleur": "4.1.5",
-    "sade": "1.8.1",
-    "tiny-glob": "0.2.9"
+    "execa": "6.1.0",
+    "fast-glob": "3.2.12",
+    "tsx": "3.12.3"
   },
   "devDependencies": {
     "@types/node": "18.11.18",
