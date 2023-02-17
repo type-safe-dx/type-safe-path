@@ -26,6 +26,9 @@ pages/
 
 ↓ `$ type-safe-path`
 
+<details>
+<summary>generated code</summary>
+
 ```ts
 type PathToParams = {
   posts: never
@@ -60,6 +63,8 @@ export function buildPath<Path extends keyof PathToParams>(
   )
 }
 ```
+
+</details>
 
 https://user-images.githubusercontent.com/40315079/212696306-ed6c9f88-4641-4549-b539-f56fba4814d1.mp4
 
