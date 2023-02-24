@@ -1,6 +1,7 @@
 # type-safe-path
 
 [![codecov](https://codecov.io/gh/KoichiKiyokawa/type-safe-path/branch/main/graph/badge.svg?token=61F6FRPXKN)](https://codecov.io/gh/KoichiKiyokawa/type-safe-path)
+[![npm version](https://badge.fury.io/js/@kiyoshiro%2Ftype-safe-path.svg)](https://badge.fury.io/js/@kiyoshiro%2Ftype-safe-path)
 
 ## Usage
 
