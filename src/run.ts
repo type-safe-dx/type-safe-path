@@ -6,10 +6,11 @@ import { createPathHelper } from "./core";
 import glob from "tiny-glob";
 import { defaultFilePathToRoutePath, removePathExtension, removeSuffix } from "./utils";
 import kleur from "kleur";
+import chokidar from "chokidar";
 
-type Option = { configFilePath: string | undefined; output?: string };
+type Option = { configFilePath: string | undefined; output?: string; watch: boolean };
 
-export async function run({ configFilePath, output }: Option): Promise<void> {
+export async function run({ configFilePath, output, watch }: Option): Promise<void> {
   const config: Config =
     configFilePath === undefined
       ? autoDetectConfig()
@@ -22,15 +23,39 @@ export async function run({ configFilePath, output }: Option): Promise<void> {
   const ignorePathList =
     config.ignoreGlob === undefined ? [] : await glob(config.ignoreGlob, { cwd: config.routeDir });
 
-  const pathHelper = createPathHelper(
-    pathList.filter((p) => !ignorePathList.includes(p)),
-    { dynamicSegmentPattern: config.dynamicSegmentPattern },
-  );
-
   const outputFilePath =
     output ?? config.output ?? fs.existsSync("src") ? "src/path.ts" : "path.ts";
-  fs.writeFileSync(outputFilePath, pathHelper, "utf-8");
-  console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
+
+  const generate = () => {
+    const pathHelper = createPathHelper(
+      pathList.filter((p) => !ignorePathList.includes(p)),
+      { dynamicSegmentPattern: config.dynamicSegmentPattern },
+    );
+    fs.writeFileSync(outputFilePath, pathHelper, "utf-8");
+  };
+
+  if (watch) {
+    console.log(
+      `Watching ${kleur.bold(
+        kleur.green(
+          (config.routeDir.endsWith("/") ? config.routeDir : `${config.routeDir}/`) +
+            config.routesGlob,
+        ),
+      )}...`,
+    );
+    const watcher = chokidar.watch(config.routesGlob, {
+      ignored: config.ignoreGlob,
+      cwd: config.routeDir,
+    });
+    watcher.on("all", (event, path) => {
+      console.log(event, path);
+      generate();
+      console.log(kleur.green("Regenerated path helper"));
+    });
+  } else {
+    generate();
+    console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
+  }
 }
 
 function showDetectedResult(framework: string) {

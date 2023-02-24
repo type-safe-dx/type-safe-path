@@ -20,6 +20,7 @@ test("cli help output should match snapshot", () => {
       Options
         -c, --config     config file path. e.g. tsp.config.ts
         -o, --output     output file path e.g. src/path.ts
+        -w, --watch      watch the file changes and regenerate the path helper. e.g. src/**/*.tsx
         -v, --version    Displays current version
         -h, --help       Displays this message
 

@@ -10,10 +10,11 @@ prog
   .describe("Generate a path helper file from directory structure.")
   .option("-c, --config", "config file path. e.g. tsp.config.ts")
   .option("-o, --output", "output file path e.g. src/path.ts")
-  .action(async (opts: { config: string; output: string }) => {
+  .option("-w, --watch", "watch the file changes and regenerate the path helper. e.g. src/**/*.tsx")
+  .action(async (opts: { config: string; output: string; watch: boolean }) => {
     try {
       const { run } = await import("./run");
-      await run({ configFilePath: opts.config, output: opts.output });
+      await run({ configFilePath: opts.config, output: opts.output, watch: opts.watch });
     } catch (e) {
       console.log(kleur.red((e as Error).message));
     }
