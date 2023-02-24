@@ -23,7 +23,7 @@
     "test:typecheck": "vitest typecheck",
     "test:coverage": "vitest --run --coverage",
     "prepublishOnly": "pnpm build",
-    "release": "bumpp package.json && pnpm publish"
+    "release": "tsc --noEmit && pnpm run test --run && bumpp package.json && pnpm publish && changelogithub"
   },
   "lint-staged": {
     "*.{ts}": [
@@ -41,6 +41,7 @@
     "@types/node": "18.13.0",
     "@vitest/coverage-c8": "0.28.5",
     "bumpp": "8.2.1",
+    "changelogithub": "0.12.7",
     "husky": "8.0.3",
     "lint-staged": "13.1.2",
     "rome": "11.0.0",
