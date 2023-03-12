@@ -77,8 +77,8 @@ type PathToParams = {
  * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
  */
 export function buildPath<Path extends keyof PathToParams>(
-path: Path,
-args: PathToParams[Path],
+  path: Path,
+  args: PathToParams[Path],
 ): string {
   return (
     path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
