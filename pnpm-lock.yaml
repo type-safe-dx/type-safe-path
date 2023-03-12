@@ -39,13 +39,13 @@ importers:
       unbuild: 1.1.2
       vitest: 0.28.5
 
-  e2e/fixtures/bracket:
+  e2e/projects/bracket:
     specifiers:
       '@kiyoshiro/type-safe-path': ../../../
     devDependencies:
       '@kiyoshiro/type-safe-path': link:../../..
 
-  e2e/fixtures/colon:
+  e2e/projects/colon:
     specifiers:
       '@kiyoshiro/type-safe-path': ../../../
     devDependencies:
