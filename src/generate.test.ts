@@ -30,7 +30,7 @@ test("bracket", async () => {
     args: PathToParams[Path],
     ): string {
     return (
-      path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => (args.params as any)[key]) +
+      path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
       (args.query
         ? '?' + new URLSearchParams(args.query as any).toString()
         : '') +
@@ -69,7 +69,7 @@ it("colon", async () => {
     args: PathToParams[Path],
     ): string {
     return (
-      path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => (args.params as any)[key]) +
+      path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
       (args.query
         ? '?' + new URLSearchParams(args.query as any).toString()
         : '') +

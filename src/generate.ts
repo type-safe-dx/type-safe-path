@@ -81,7 +81,7 @@ path: Path,
 args: PathToParams[Path],
 ): string {
 return (
-  path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => (args.params as any)[key]) +
+  path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
   (args.query
     ? '?' + new URLSearchParams(args.query as any).toString()
     : '') +
