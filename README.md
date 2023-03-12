@@ -71,7 +71,7 @@ export function $echoPath<Path extends keyof PathToParams>(path: Path): string {
 
 </details>
 
-https://user-images.githubusercontent.com/40315079/212696306-ed6c9f88-4641-4549-b539-f56fba4814d1.mp4
+https://user-images.githubusercontent.com/40315079/224537579-e3a28043-68cd-4a0a-bcfc-73df8113456d.mp4
 
 ## Comparison
 
