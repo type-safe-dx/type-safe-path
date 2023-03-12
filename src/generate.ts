@@ -32,27 +32,33 @@ export async function generate({
    */
   async function createTypeDefinitionRow(filePath: string): Promise<string> {
     const routePath = filePathToRoutePath({ filePath, routeDir });
-    const pathForKey = normalizePath(routePath);
+
     const params = routePath
       .split("/")
       .filter((p) => dynamicSegmentRegex.test(p))
       .map((m) => m.replace(dynamicSegmentRegex, "$1"));
-    if (params.length === 0) return `'${pathForKey}': never`;
 
-    const resolvedFilePath = path.resolve(routeDir, filePath);
+    const paramsTypeDef =
+      params.length === 0
+        ? null
+        : `params: { ${params.map((param) => `${param}: string | number`).join("; ")} }`;
+
+    const routeFileAbsolutePath = path.resolve(routeDir, filePath);
     const query = await extractQueryType({
-      filePath: resolvedFilePath,
-      source: await fs.readFile(resolvedFilePath, "utf-8"),
-      routeDir: routeDir,
-      outputPath: output,
+      routeFileAbsolutePath,
+      source: await fs.readFile(routeFileAbsolutePath, "utf-8"),
+      outputAbsolutePath: path.resolve(output),
     });
     const queryTypeDef = query
       ? `query: ${query}`
       : "query?: Record<string, string | number | string[] | number[]>";
 
-    return `'${pathForKey}': { params: { ${params
-      .map((param) => `${param}: string | number`)
-      .join("; ")} }; ${queryTypeDef}; hash?: string }`;
+    const hashTypeDef = "hash?: string";
+
+    const pathForKey = normalizePath(routePath);
+    return `'${pathForKey}': { ${[paramsTypeDef, queryTypeDef, hashTypeDef]
+      .filter(Boolean)
+      .join(";")} }`;
   }
 
   return `// prettier-ignore

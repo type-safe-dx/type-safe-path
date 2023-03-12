@@ -20,7 +20,7 @@
     "lint:check": "rome check .",
     "lint:fix": "rome format --write .",
     "test": "vitest",
-    "test:e2e": "pnpm build && pnpm run --filter './e2e/fixtures/*' generate && vitest -c vitest.e2e.config.ts --run",
+    "test:e2e": "pnpm build && pnpm run --filter './e2e/projects/*' generate && vitest -c vitest.e2e.config.ts --run",
     "test:typecheck": "vitest typecheck",
     "test:coverage": "vitest --run --coverage",
     "prepublishOnly": "pnpm build",

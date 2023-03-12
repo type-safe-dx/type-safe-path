@@ -1,19 +1,21 @@
 import path from "path";
 
 export async function extractQueryType({
-  filePath,
+  routeFileAbsolutePath,
   source,
-  outputPath,
+  outputAbsolutePath,
 }: {
-  filePath: string;
+  routeFileAbsolutePath: string;
   source: string;
-  routeDir: string;
-  outputPath: string;
+  outputAbsolutePath: string;
 }): Promise<string | null> {
   if (!source.includes("export type Query")) return null;
 
-  if (/.*(ts|tsx)$/.test(filePath)) {
-    const importPath = path.relative(outputPath, filePath).replace(/\.(ts|tsx)?$/, "");
+  if (/.*(ts|tsx)$/.test(routeFileAbsolutePath)) {
+    const importPath = path
+      .relative(path.resolve(outputAbsolutePath), path.resolve(routeFileAbsolutePath))
+      .replace(new RegExp("../"), "") // result of path.resolve is one deeper than expected, so remove one level of "../"
+      .replace(/\.(ts|tsx)?$/, "");
     return `import('${importPath}').Query`;
   }
 
@@ -30,7 +32,7 @@ export async function extractQueryType({
         return i;
       }
     }
-    throw Error(`invalid source code: ${filePath}`);
+    throw Error(`invalid source code: ${routeFileAbsolutePath}`);
   })();
 
   const searchParamsTypeDef = source.slice(startIndex, endIndex + 1);

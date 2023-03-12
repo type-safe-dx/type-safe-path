@@ -9,6 +9,8 @@ test("build path with params, query, hash", () => {
       hash: "section",
     }),
   ).toBe("/posts/1/comments/2?q=1#section");
+
+  expect(buildPath("/about", { query: { q: "hoge" } }));
 });
 
 test("echoPath should returns the argument", () => {
