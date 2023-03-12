@@ -13,8 +13,8 @@ prog
   .option("-w, --watch", "watch the file changes and regenerate the path helper. e.g. src/**/*.tsx")
   .action(async (opts: { config: string; output: string; watch: boolean }) => {
     try {
-      const { run } = await import("./run");
-      await run({ configFilePath: opts.config, output: opts.output, watch: opts.watch });
+      const { generate } = await import("./generate");
+      await generate({ configFilePath: opts.config, output: opts.output, watch: opts.watch });
     } catch (e) {
       console.log(kleur.red((e as Error).message));
     }

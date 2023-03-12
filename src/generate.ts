@@ -10,7 +10,7 @@ import chokidar from "chokidar";
 
 type Option = { configFilePath: string | undefined; output?: string; watch: boolean };
 
-export async function run({ configFilePath, output, watch }: Option): Promise<void> {
+export async function generate({ configFilePath, output, watch }: Option): Promise<void> {
   const config: Config =
     configFilePath === undefined
       ? autoDetectConfig()
@@ -26,7 +26,7 @@ export async function run({ configFilePath, output, watch }: Option): Promise<vo
   const outputFilePath =
     output ?? config.output ?? fs.existsSync("src") ? "src/path.ts" : "path.ts";
 
-  const generate = () => {
+  const run = () => {
     const pathHelper = createPathHelper(
       pathList.filter((p) => !ignorePathList.includes(p)),
       { dynamicSegmentPattern: config.dynamicSegmentPattern },
@@ -49,11 +49,11 @@ export async function run({ configFilePath, output, watch }: Option): Promise<vo
     });
     watcher.on("all", (event, path) => {
       console.log(event, path);
-      generate();
+      run();
       console.log(kleur.green("Regenerated path helper"));
     });
   } else {
-    generate();
+    run();
     console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
   }
 }
