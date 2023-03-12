@@ -15,13 +15,13 @@ export function buildPath<Path extends keyof PathToParams>(
   ...params: PathToParams[Path] extends never
     ? [
         params?: {
-          searchParams?: Record<string, string | number>
+          query?: Record<string, string | number>
           hash?: string
         }
       ]
     : [
         params: PathToParams[Path] & {
-          searchParams?: Record<string, string | number>
+          query?: Record<string, string | number>
           hash?: string
         }
       ]
@@ -31,8 +31,8 @@ export function buildPath<Path extends keyof PathToParams>(
 
   return (
     path.replace(/\[(\w+)\]/g, (_, key) => (pathParams as any)[key]) +
-    (pathParams.searchParams
-      ? '?' + new URLSearchParams(pathParams.searchParams as any).toString()
+    (pathParams.query
+      ? '?' + new URLSearchParams(pathParams.query as any).toString()
       : '') +
     (pathParams.hash ? '#' + pathParams.hash : '')
   )
