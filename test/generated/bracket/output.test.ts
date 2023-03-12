@@ -3,7 +3,7 @@ import { buildPath, echoPath } from './output'
 
 test('build path with params, query, hash', () => {
   expect(
-    buildPath('posts/[id]/comments/[commentId]', {
+    buildPath('/posts/[id]/comments/[commentId]', {
       id: 1,
       commentId: 2,
       query: { q: 1 },
@@ -13,5 +13,5 @@ test('build path with params, query, hash', () => {
 })
 
 test('echoPath should returns the argument', () => {
-  expect(echoPath('posts/[id]/comments/[commentId]')).toBe('posts/[id]/comments/[commentId]')
+  expect(echoPath('/posts/[id]/comments/[commentId]')).toBe('/posts/[id]/comments/[commentId]')
 })

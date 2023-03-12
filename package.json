@@ -26,7 +26,7 @@
     "release": "tsc --noEmit && pnpm run test --run && bumpp package.json && pnpm publish && changelogithub"
   },
   "lint-staged": {
-    "*.{ts}": [
+    "*.{ts,tsx}": [
       "rome format --write"
     ]
   },

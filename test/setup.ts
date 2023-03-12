@@ -1,6 +1,5 @@
-import { createPathHelper } from "../src/core";
 import fs from "fs";
-import { execSync } from "child_process";
+import { createPathHelper } from "../src/core";
 
 export function setup() {
   fs.writeFileSync(

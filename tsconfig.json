@@ -8,6 +8,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "outDir": "./dist",
     "resolveJsonModule": true
-  },
-  "include": ["./src/**/*.ts"]
+  }
 }
