@@ -3,7 +3,7 @@
 
 type PathToParams = {
   '/about': never,
-  '/posts/[id]/comments/[commentId]': {id: string | number, commentId: string | number}
+  '/posts/[id]/comments/[commentId]': { params: { id: string | number; commentId: string | number }; query: import('posts/[id]/comments/[commentId]').Query; hash?: string }
 }
 
 /**
@@ -12,29 +12,14 @@ type PathToParams = {
  */
 export function buildPath<Path extends keyof PathToParams>(
   path: Path,
-  ...params: PathToParams[Path] extends never
-    ? [
-        params?: {
-          query?: Record<string, string | number>
-          hash?: string
-        }
-      ]
-    : [
-        params: PathToParams[Path] & {
-          query?: Record<string, string | number>
-          hash?: string
-        }
-      ]
+  args: PathToParams[Path],
 ): string {
-  const [pathParams] = params
-  if (pathParams === undefined) return path
-
   return (
-    path.replace(/\[(\w+)\]/g, (_, key) => (pathParams as any)[key]) +
-    (pathParams.query
-      ? '?' + new URLSearchParams(pathParams.query as any).toString()
+    path.replace(/\[(\w+)\]/g, (_, key) => (args.params as any)[key]) +
+    (args.query
+      ? '?' + new URLSearchParams(args.query as any).toString()
       : '') +
-    (pathParams.hash ? '#' + pathParams.hash : '')
+    (args.hash ? '#' + args.hash : '')
   )
 }
 

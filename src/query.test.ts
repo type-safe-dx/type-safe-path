@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { extractQueryType } from "./search-params";
+import { extractQueryType } from "./query";
 
 test.each(["ts", "tsx"])("extract from $1 file", async (ext) => {
   const searchParams = await extractQueryType(`test/fixtures/search-params/page.${ext}`);

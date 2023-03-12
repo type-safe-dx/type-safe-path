@@ -1,7 +1,18 @@
 import fs from "fs/promises";
+import path from "path";
 
-export async function extractQueryType(filePath: string): Promise<string | null> {
-  if (/.*(ts|tsx)$/.test(filePath)) return `import('${filePath.replace(/\.(ts|tsx)$/, "")}').Query`;
+export async function extractQueryType({
+  filePath,
+  outputPath,
+}: {
+  filePath: string;
+  routeDir: string;
+  outputPath: string;
+}): Promise<string | null> {
+  if (/.*(ts|tsx)$/.test(filePath)) {
+    const importPath = path.relative(outputPath, filePath).replace(/\.tsx?$/, "");
+    return `import('${importPath}').Query`;
+  }
 
   return await extractQueryTypeFromSourceString(filePath);
 }

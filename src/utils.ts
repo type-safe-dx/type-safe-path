@@ -25,6 +25,14 @@ export function removePathExtension(path: string): string {
 
 /**
  * @example
+ * removePrefix('pages/posts/index', 'pages') // => '/posts/index'
+ */
+export function removePrefix(str: string, prefix: string): string {
+  return str.replace(new RegExp(`^${prefix}`), "");
+}
+
+/**
+ * @example
  * removeSuffix('/posts/index', 'index') // => '/posts/'
  */
 export function removeSuffix(str: string, suffix: string): string {

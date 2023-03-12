@@ -1,9 +1,16 @@
 import { Config } from "./config";
-import { defaultFilePathToRoutePath, normalizePath } from "./utils";
+import { extractQueryType } from "./query";
+import { defaultFilePathToRoutePath, normalizePath, removePrefix } from "./utils";
 
-export function createPathHelper(
+export async function createPathHelper(
+  /** relative path from cwd */
   pathList: string[],
-  options: Pick<Config, "dynamicSegmentPattern" | "filePathToRoutePath">,
+  options: {
+    routeDir: string;
+    output: string;
+    dynamicSegmentPattern: string;
+    filePathToRoutePath: ((filePath: string) => string) | undefined;
+  },
 ) {
   const dynamicSegmentRegex =
     options.dynamicSegmentPattern === "bracket"
@@ -14,15 +21,38 @@ export function createPathHelper(
 
   const filePathToRoutePath = options.filePathToRoutePath || defaultFilePathToRoutePath;
 
+  /**
+   * @private
+   * e.g. posts/[id]/index.tsx => '/posts/[id]: { params: { id: string | number }; query: ... }
+   * e.g. about.tsx => '/about': { query?: ... }
+   */
+  async function createTypeDefinitionRow(filePath: string): Promise<string> {
+    const pathForKey = normalizePath(filePathToRoutePath(removePrefix(filePath, options.routeDir)));
+    const params = filePathToRoutePath(filePath)
+      .split("/")
+      .filter((p) => dynamicSegmentRegex.test(p))
+      .map((m) => m.replace(dynamicSegmentRegex, "$1"));
+    if (params.length === 0) return `'${pathForKey}': never`;
+
+    const query = await extractQueryType({
+      filePath,
+      routeDir: options.routeDir,
+      outputPath: options.output,
+    });
+    const queryTypeDef = query
+      ? `query: ${query}`
+      : "query?: Record<string, string | number | string[] | number[]>";
+
+    return `'${pathForKey}': { params: { ${params
+      .map((param) => `${param}: string | number`)
+      .join("; ")} }; ${queryTypeDef}; hash?: string }`;
+  }
+
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
-  ${pathList
-    .map((p) =>
-      createTypeDefinitionRow(filePathToRoutePath(p), dynamicSegmentRegex, filePathToRoutePath),
-    )
-    .join(",\n  ")}
+  ${(await Promise.all(pathList.map((p) => createTypeDefinitionRow(p)))).join(",\n  ")}
 }
 
 /**
@@ -31,29 +61,14 @@ type PathToParams = {
  */
 export function buildPath<Path extends keyof PathToParams>(
   path: Path,
-  ...params: PathToParams[Path] extends never
-    ? [
-        params?: {
-          query?: Record<string, string | number>
-          hash?: string
-        }
-      ]
-    : [
-        params: PathToParams[Path] & {
-          query?: Record<string, string | number>
-          hash?: string
-        }
-      ]
+  args: PathToParams[Path],
 ): string {
-  const [pathParams] = params
-  if (pathParams === undefined) return path
-
   return (
-    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => (pathParams as any)[key]) +
-    (pathParams.query
-      ? '?' + new URLSearchParams(pathParams.query as any).toString()
+    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => (args.params as any)[key]) +
+    (args.query
+      ? '?' + new URLSearchParams(args.query as any).toString()
       : '') +
-    (pathParams.hash ? '#' + pathParams.hash : '')
+    (args.hash ? '#' + args.hash : '')
   )
 }
 
@@ -65,24 +80,4 @@ export function echoPath<Path extends keyof PathToParams>(path: Path): string {
   return path
 }
 `;
-}
-
-/**
- * @private
- * e.g. posts/[id]/index.tsx => '/posts/[id]: { id: string | number }
- * e.g. about.tsx => '/about': never
- */
-function createTypeDefinitionRow(
-  path: string,
-  dynamicSegmentRegex: RegExp,
-  filePathToRoutePath: (filePath: string) => string,
-): string {
-  const pathForKey = normalizePath(filePathToRoutePath(path));
-  const params = path
-    .split("/")
-    .filter((p) => dynamicSegmentRegex.test(p))
-    .map((m) => m.replace(dynamicSegmentRegex, "$1"));
-  if (params.length === 0) return `'${pathForKey}': never`;
-
-  return `'${pathForKey}': {${params.map((param) => `${param}: string | number`).join(", ")}}`;
 }

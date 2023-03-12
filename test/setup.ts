@@ -1,17 +1,19 @@
-import fs from "fs";
-import { createPathHelper } from "../src/core";
+import path from "path";
+import { fileURLToPath } from "url";
+import { generate } from "../src/generate";
 
-export function setup() {
-  fs.writeFileSync(
-    "test/generated/bracket/output.ts",
-    createPathHelper(["about", "posts/[id]/comments/[commentId]"], {
-      dynamicSegmentPattern: "bracket",
-    }),
-  );
-  fs.writeFileSync(
-    "test/generated/colon/output.ts",
-    createPathHelper(["about", "posts/:id/comments/:commentId"], {
-      dynamicSegmentPattern: "colon",
-    }),
-  );
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export async function setup() {
+  process.chdir(path.resolve(dirname, "fixtures/bracket"));
+  await generate({
+    configFilePath: "./tsp.config",
+    output: path.resolve(dirname, "./generated/bracket/output.ts"),
+  });
+
+  process.chdir(path.resolve(dirname, "fixtures/colon"));
+  await generate({
+    configFilePath: "./tsp.config",
+    output: path.resolve(dirname, "./generated/colon/output.ts"),
+  });
 }

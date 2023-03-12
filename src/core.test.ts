@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { createPathHelper } from "./core";
 
 describe("createPathHelperFromPathList", () => {
-  it("bracket", () => {
+  it("bracket", async () => {
     expect(
-      createPathHelper(["about", "posts/[id]/comments/[commentId]"], {
+      await createPathHelper(["about.tsx", "posts/[id]/comments/[commentId].tsx"], {
         dynamicSegmentPattern: "bracket",
       }),
     ).toMatchInlineSnapshot(`
@@ -59,9 +59,9 @@ describe("createPathHelperFromPathList", () => {
     `);
   });
 
-  it("colon", () => {
+  it("colon", async () => {
     expect(
-      createPathHelper(["about", "posts/:id/comments/:commentId"], {
+      await createPathHelper(["about.tsx", "posts/:id/comments/:commentId.tsx"], {
         dynamicSegmentPattern: "colon",
       }),
     ).toMatchInlineSnapshot(`
