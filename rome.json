@@ -6,9 +6,10 @@
     "lineWidth": 100
   },
   "linter": {
-    "enabled": true
+    "enabled": true,
+    "ignore": ["e2e/generated"]
   },
   "files": {
-    "ignore": ["pnpm-lock.yaml", "dist", "coverage", "test/generated"]
+    "ignore": ["pnpm-lock.yaml", "dist", "coverage"]
   }
 }

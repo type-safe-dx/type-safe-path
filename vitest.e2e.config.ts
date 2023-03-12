@@ -2,7 +2,6 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    coverage: { reporter: "lcov" },
-    exclude: ["e2e/**", "node_modules/**"],
+    include: ["e2e/**/*.test.ts"],
   },
 });

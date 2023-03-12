@@ -1,121 +1,100 @@
+import glob from "fast-glob";
+import { Config } from "./config/type";
+import { extractQueryType } from "./query";
+import { normalizePath } from "./utils";
+import fs from "fs/promises";
 import path from "path";
-import fs from "fs";
-import jiti from "jiti";
-import { Config } from "./config";
-import { createPathHelper } from "./core";
-import glob from "tiny-glob";
-import { defaultFilePathToRoutePath, removePathExtension, removeSuffix } from "./utils";
-import kleur from "kleur";
-import chokidar from "chokidar";
 
-type Option = { configFilePath: string | undefined; output?: string; watch: boolean };
+type Option = Required<Config> & { watch?: boolean };
 
-export async function generate({ configFilePath, output, watch }: Option): Promise<void> {
-  const config: Config =
-    configFilePath === undefined
-      ? autoDetectConfig()
-      : jiti(process.cwd(), {
-          interopDefault: true,
-          esmResolve: true,
-        })(path.resolve("./tsp.config"));
+export async function generate({
+  routeDir,
+  routesGlob,
+  ignoreGlob,
+  dynamicSegmentPattern,
+  filePathToRoutePath,
+  output,
+}: Option): Promise<string> {
+  const pathList = await glob(routesGlob, { cwd: routeDir });
+  const ignorePathList = ignoreGlob === undefined ? [] : await glob(ignoreGlob, { cwd: routeDir });
 
-  const pathList = await glob(config.routesGlob, { cwd: config.routeDir });
-  const ignorePathList =
-    config.ignoreGlob === undefined ? [] : await glob(config.ignoreGlob, { cwd: config.routeDir });
+  const dynamicSegmentRegex =
+    dynamicSegmentPattern === "bracket"
+      ? /\[(\w+)\]/
+      : dynamicSegmentPattern === "colon"
+      ? /:(\w+)/
+      : dynamicSegmentPattern;
 
-  const outputFilePath =
-    output ?? config.output ?? fs.existsSync("src") ? "src/path.ts" : "path.ts";
+  /**
+   * @private
+   * e.g. posts/[id]/index.tsx => '/posts/[id]: { params: { id: string | number }; query: ... }
+   * e.g. about.tsx => '/about': { query?: ... }
+   */
+  async function createTypeDefinitionRow(filePath: string): Promise<string> {
+    const routePath = filePathToRoutePath({ filePath, routeDir });
 
-  const run = () => {
-    const pathHelper = createPathHelper(
-      pathList.filter((p) => !ignorePathList.includes(p)),
-      { dynamicSegmentPattern: config.dynamicSegmentPattern },
-    );
-    fs.writeFileSync(outputFilePath, pathHelper, "utf-8");
-  };
+    const params = routePath
+      .split("/")
+      .filter((p) => dynamicSegmentRegex.test(p))
+      .map((m) => m.replace(dynamicSegmentRegex, "$1"));
 
-  if (watch) {
-    console.log(
-      `Watching ${kleur.bold(
-        kleur.green(
-          (config.routeDir.endsWith("/") ? config.routeDir : `${config.routeDir}/`) +
-            config.routesGlob,
-        ),
-      )}...`,
-    );
-    const watcher = chokidar.watch(config.routesGlob, {
-      ignored: config.ignoreGlob,
-      cwd: config.routeDir,
+    const paramsTypeDef =
+      params.length === 0
+        ? null
+        : `params: { ${params.map((param) => `${param}: string | number`).join("; ")} }`;
+
+    const routeFileAbsolutePath = path.resolve(routeDir, filePath);
+    const query = await extractQueryType({
+      routeFileAbsolutePath,
+      source: await fs.readFile(routeFileAbsolutePath, "utf-8"),
+      outputAbsolutePath: path.resolve(output),
     });
-    watcher.on("all", (event, path) => {
-      console.log(event, path);
-      run();
-      console.log(kleur.green("Regenerated path helper"));
-    });
-  } else {
-    run();
-    console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
+    const queryTypeDef = query
+      ? `query: ${query}`
+      : "query?: Record<string, string | number | string[] | number[]>";
+
+    const hashTypeDef = "hash?: string";
+
+    const pathForKey = normalizePath(routePath);
+    return `'${pathForKey}': { ${[paramsTypeDef, queryTypeDef, hashTypeDef]
+      .filter(Boolean)
+      .join(";")} }`;
   }
+
+  return `// prettier-ignore
+// This file is auto generated. DO NOT EDIT
+
+type PathToParams = {
+${(
+  await Promise.all(
+    pathList.filter((p) => !ignorePathList.includes(p)).map((p) => createTypeDefinitionRow(p)),
+  )
+).join(",\n  ")}
 }
 
-function showDetectedResult(framework: string) {
-  console.log(`Detected framework: ${kleur.green(framework)}`);
+/**
+* @example
+* buildPath('/posts/[id]', { id: 1 }) // => '/posts/1'
+*/
+export function buildPath<Path extends keyof PathToParams>(
+path: Path,
+args: PathToParams[Path],
+): string {
+return (
+  path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
+  (args.query
+    ? '?' + new URLSearchParams(args.query as any).toString()
+    : '') +
+  (args.hash ? '#' + args.hash : '')
+)
 }
 
-function autoDetectConfig(): Config {
-  console.log("Config file path is not specified, so we will auto detect the config");
-  if (fs.existsSync("next.config.js")) {
-    // Next.js
-    showDetectedResult("Next.js");
-    const routeDir = ["src/app", "src/pages", "app", "pages"].find((candidate) =>
-      fs.existsSync(candidate),
-    );
-    if (routeDir === undefined) {
-      throw Error("Cannot detect routeDir.\nThere are no src/app, src/pages, app or pages.");
-    }
-
-    const isAppDir = routeDir.endsWith("app");
-
-    const routesGlob = isAppDir ? "**/page.{tsx,ts,jsx,js}" : "**/*.{tsx,ts,jsx,js}";
-
-    const filePathToRoutePath = isAppDir
-      ? (f: string) => removeSuffix(removePathExtension(f), "page")
-      : defaultFilePathToRoutePath;
-    return {
-      routeDir,
-      routesGlob,
-      ignoreGlob: "{_app,_document}.{tsx,ts,jsx,js}",
-      dynamicSegmentPattern: "bracket",
-      filePathToRoutePath,
-    };
-  }
-
-  if (["nuxt.config.ts", "nuxt.config.js"].some((c) => fs.existsSync(c))) {
-    // Nuxt3
-    showDetectedResult("Nuxt.js v3");
-    const routeDir = ["pages", "src/pages"].find((candidate) => fs.existsSync(candidate));
-    if (routeDir === undefined) {
-      throw Error("Cannot detect routeDir.\nThere are no src/app, src/pages, app or pages.");
-    }
-
-    return {
-      routeDir,
-      routesGlob: "**/*.vue",
-      dynamicSegmentPattern: "bracket",
-      filePathToRoutePath: (f: string) => removeSuffix(removePathExtension(f), "index"),
-    };
-  }
-
-  if (fs.existsSync("svelte.config.js")) {
-    // SvelteKit
-    showDetectedResult("SvelteKit");
-    return {
-      routeDir: "src/routes",
-      routesGlob: "src/routes/**/+page.svelte",
-      dynamicSegmentPattern: "bracket",
-      filePathToRoutePath: (f: string) => removeSuffix(f, "+page.svelte"),
-    } as Config;
-  }
-
-  throw Error("Cannot detect any frameworks");
+/**
+* @example
+* echoPath('/posts/[id]') // => '/posts/[id]'
+*/
+export function echoPath<Path extends keyof PathToParams>(path: Path): string {
+return path
+}
+`;
 }

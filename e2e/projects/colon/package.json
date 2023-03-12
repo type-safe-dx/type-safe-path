@@ -1,0 +1,9 @@
+{
+  "name": "colon",
+  "scripts": {
+    "generate": "type-safe-path -o ../../generated/colon/output.ts"
+  },
+  "devDependencies": {
+    "@kiyoshiro/type-safe-path": "../../../"
+  }
+}

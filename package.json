@@ -20,22 +20,24 @@
     "lint:check": "rome check .",
     "lint:fix": "rome format --write .",
     "test": "vitest",
+    "test:e2e": "pnpm build && pnpm i && pnpm run --filter './e2e/projects/*' generate && vitest -c vitest.e2e.config.ts --run",
     "test:typecheck": "vitest typecheck",
     "test:coverage": "vitest --run --coverage",
     "prepublishOnly": "pnpm build",
     "release": "tsc --noEmit && pnpm run test --run && bumpp package.json && pnpm publish && changelogithub"
   },
   "lint-staged": {
-    "*.{ts}": [
+    "*.{ts,tsx}": [
       "rome format --write"
     ]
   },
   "dependencies": {
     "chokidar": "^3.5.3",
+    "defu": "6.1.2",
+    "fast-glob": "3.2.12",
     "jiti": "^1.17.1",
     "kleur": "^4.1.5",
-    "sade": "^1.8.1",
-    "tiny-glob": "^0.2.9"
+    "sade": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "18.13.0",

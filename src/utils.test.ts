@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  defaultFilePathToRoutePath,
-  normalizePath,
-  removePathExtension,
-  removeSuffix,
-} from "./utils";
+import { normalizePath, removePathExtension, removePrefix, removeSuffix } from "./utils";
 
 describe("normalizePath", () => {
   it("normalizePath should add slash to the beginning", () => {
@@ -16,15 +11,15 @@ describe("normalizePath", () => {
   });
 });
 
-describe("defaultFilePathToRoutePath", () => {
-  it("defaultFilePathToRoutePath should remove `index` in the end", () => {
-    expect(defaultFilePathToRoutePath("posts/[id]/index.tsx")).toBe("posts/[id]/");
-  });
-});
-
 describe("removePathExtension", () => {
   it("removePathExtension should remove .tsx", () => {
     expect(removePathExtension("posts/[id]/index.tsx")).toBe("posts/[id]/index");
+  });
+});
+
+describe("removePrefix", () => {
+  it("removePrefix should remove the `pages` characters", () => {
+    expect(removePrefix("pages/posts/index", "pages")).toBe("/posts/index");
   });
 });
 
