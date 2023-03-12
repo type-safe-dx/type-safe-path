@@ -1,42 +1,55 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@types/node': 18.13.0
-  '@vitest/coverage-c8': 0.28.5
-  bumpp: 8.2.1
-  changelogithub: 0.12.7
-  chokidar: ^3.5.3
-  defu: 6.1.2
-  fast-glob: 3.2.12
-  husky: 8.0.3
-  jiti: ^1.17.1
-  kleur: ^4.1.5
-  lint-staged: 13.1.2
-  rome: 11.0.0
-  sade: ^1.8.1
-  typescript: 4.9.5
-  unbuild: 1.1.2
-  vitest: 0.28.5
+importers:
 
-dependencies:
-  chokidar: 3.5.3
-  defu: 6.1.2
-  fast-glob: 3.2.12
-  jiti: 1.17.1
-  kleur: 4.1.5
-  sade: 1.8.1
+  .:
+    specifiers:
+      '@types/node': 18.13.0
+      '@vitest/coverage-c8': 0.28.5
+      bumpp: 8.2.1
+      changelogithub: 0.12.7
+      chokidar: ^3.5.3
+      defu: 6.1.2
+      fast-glob: 3.2.12
+      husky: 8.0.3
+      jiti: ^1.17.1
+      kleur: ^4.1.5
+      lint-staged: 13.1.2
+      rome: 11.0.0
+      sade: ^1.8.1
+      typescript: 4.9.5
+      unbuild: 1.1.2
+      vitest: 0.28.5
+    dependencies:
+      chokidar: 3.5.3
+      defu: 6.1.2
+      fast-glob: 3.2.12
+      jiti: 1.17.1
+      kleur: 4.1.5
+      sade: 1.8.1
+    devDependencies:
+      '@types/node': 18.13.0
+      '@vitest/coverage-c8': 0.28.5
+      bumpp: 8.2.1
+      changelogithub: 0.12.7
+      husky: 8.0.3
+      lint-staged: 13.1.2
+      rome: 11.0.0
+      typescript: 4.9.5
+      unbuild: 1.1.2
+      vitest: 0.28.5
 
-devDependencies:
-  '@types/node': 18.13.0
-  '@vitest/coverage-c8': 0.28.5
-  bumpp: 8.2.1
-  changelogithub: 0.12.7
-  husky: 8.0.3
-  lint-staged: 13.1.2
-  rome: 11.0.0
-  typescript: 4.9.5
-  unbuild: 1.1.2
-  vitest: 0.28.5
+  e2e/fixtures/bracket:
+    specifiers:
+      '@kiyoshiro/type-safe-path': ../../../
+    devDependencies:
+      '@kiyoshiro/type-safe-path': link:../../..
+
+  e2e/fixtures/colon:
+    specifiers:
+      '@kiyoshiro/type-safe-path': ../../../
+    devDependencies:
+      '@kiyoshiro/type-safe-path': link:../../..
 
 packages:
 

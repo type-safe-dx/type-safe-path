@@ -9,7 +9,9 @@ import path from "path";
 import { Config } from "./config/type";
 import fs from "fs";
 import defu from "defu";
-import { removePathExtension } from "./utils";
+
+const loadTsConfig = (configPath: string) =>
+  jiti(process.cwd(), { interopDefault: true, esmResolve: true })(configPath);
 
 const prog = sade("type-safe-path", true);
 prog
@@ -19,19 +21,13 @@ prog
   .option("-o, --output", "output file path e.g. src/path.ts")
   .option("-w, --watch", "watch the file changes and regenerate the path helper. e.g. src/**/*.tsx")
   .action(async (opts: { config?: string; output?: string; watch?: boolean }) => {
+    console.log(path.resolve(process.cwd(), opts.config ?? "tsp.config.ts"));
     try {
       const resolvedConfig = defu(
         { output: opts.output } as Required<Config>,
-        opts.config
-          ? jiti(process.cwd(), {
-              interopDefault: true,
-              esmResolve: true,
-            })(path.resolve(process.cwd(), removePathExtension(opts.config)))
-          : {},
+        loadTsConfig(path.resolve(process.cwd(), opts.config ?? "tsp.config.ts")),
         autoDetectConfig(),
       );
-
-      console.log({ resolvedConfig });
 
       const { generate } = await import("./generate");
       const run = async () => {
@@ -64,9 +60,7 @@ prog
       } else {
         await run();
         console.log(
-          `Path helper has been generated to ${kleur.bold(
-            kleur.green(resolvedConfig.output ?? "TODO"),
-          )}`,
+          `Path helper has been generated to ${kleur.bold(kleur.green(resolvedConfig.output))}`,
         );
       }
     } catch (e) {
