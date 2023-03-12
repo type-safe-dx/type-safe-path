@@ -3,6 +3,7 @@ import { Config } from "./config/type";
 import { extractQueryType } from "./query";
 import { normalizePath } from "./utils";
 import fs from "fs/promises";
+import path from "path";
 
 type Option = Required<Config> & { watch?: boolean };
 
@@ -38,9 +39,10 @@ export async function generate({
       .map((m) => m.replace(dynamicSegmentRegex, "$1"));
     if (params.length === 0) return `'${pathForKey}': never`;
 
+    const resolvedFilePath = path.resolve(routeDir, filePath);
     const query = await extractQueryType({
-      filePath,
-      source: await fs.readFile(filePath, "utf-8"),
+      filePath: resolvedFilePath,
+      source: await fs.readFile(resolvedFilePath, "utf-8"),
       routeDir: routeDir,
       outputPath: output,
     });

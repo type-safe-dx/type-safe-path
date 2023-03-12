@@ -9,6 +9,7 @@ import path from "path";
 import { Config } from "./config/type";
 import fs from "fs";
 import defu from "defu";
+import { defaultFilePathToRoutePath } from "./config/default";
 
 const loadTsConfig = (configPath: string) =>
   jiti(process.cwd(), { interopDefault: true, esmResolve: true })(configPath);
@@ -21,18 +22,18 @@ prog
   .option("-o, --output", "output file path e.g. src/path.ts")
   .option("-w, --watch", "watch the file changes and regenerate the path helper. e.g. src/**/*.tsx")
   .action(async (opts: { config?: string; output?: string; watch?: boolean }) => {
-    console.log(path.resolve(process.cwd(), opts.config ?? "tsp.config.ts"));
     try {
       const resolvedConfig = defu(
         { output: opts.output } as Required<Config>,
         loadTsConfig(path.resolve(process.cwd(), opts.config ?? "tsp.config.ts")),
         autoDetectConfig(),
+        { filePathToRoutePath: defaultFilePathToRoutePath } as Config,
       );
 
       const { generate } = await import("./generate");
       const run = async () => {
         fs.writeFileSync(
-          resolvedConfig.output ?? (fs.existsSync("src") ? "src/path.ts" : "path.ts"),
+          path.resolve(resolvedConfig.output ?? (fs.existsSync("src") ? "src/path.ts" : "path.ts")),
           await generate(resolvedConfig),
         );
       };
