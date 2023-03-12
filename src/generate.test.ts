@@ -17,6 +17,8 @@ test("bracket", async () => {
     "// prettier-ignore
     // This file is auto generated. DO NOT EDIT
 
+    type IsAllPropertiesOptional<T> = { [K in keyof T]?: any } extends T ? true : false
+
     type PathToParams = {
       
     }
@@ -27,14 +29,15 @@ test("bracket", async () => {
      */
     export function $path<Path extends keyof PathToParams>(
       path: Path,
-      args: PathToParams[Path],
+      ...args: IsAllPropertiesOptional<PathToParams[Path]> extends true ? [p?: PathToParams[Path]] : [p: PathToParams[Path]]
     ): string {
+      const { params, query, hash } = (args[0] ?? {} as any)
       return (
-        path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
-        (args.query
-          ? '?' + new URLSearchParams(args.query as any).toString()
+        (params ? path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => params[key]) : path) +
+        (query
+          ? '?' + new URLSearchParams(query as any).toString()
           : '') +
-        (args.hash ? '#' + args.hash : '')
+        (hash ? '#' + hash : '')
       )
     }
 
@@ -56,6 +59,8 @@ it("colon", async () => {
     "// prettier-ignore
     // This file is auto generated. DO NOT EDIT
 
+    type IsAllPropertiesOptional<T> = { [K in keyof T]?: any } extends T ? true : false
+
     type PathToParams = {
       
     }
@@ -66,14 +71,15 @@ it("colon", async () => {
      */
     export function $path<Path extends keyof PathToParams>(
       path: Path,
-      args: PathToParams[Path],
+      ...args: IsAllPropertiesOptional<PathToParams[Path]> extends true ? [p?: PathToParams[Path]] : [p: PathToParams[Path]]
     ): string {
+      const { params, query, hash } = (args[0] ?? {} as any)
       return (
-        path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
-        (args.query
-          ? '?' + new URLSearchParams(args.query as any).toString()
+        (params ? path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => params[key]) : path) +
+        (query
+          ? '?' + new URLSearchParams(query as any).toString()
           : '') +
-        (args.hash ? '#' + args.hash : '')
+        (hash ? '#' + hash : '')
       )
     }
 

@@ -23,8 +23,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint:check
-      - run: pnpm tsc --noEmit
       - run: pnpm test:coverage
       - run: pnpm test:e2e
+      - run: pnpm tsc --noEmit
       - run: pnpm test:typecheck
       - uses: codecov/codecov-action@v3.1.1

@@ -64,6 +64,8 @@ export async function generate({
   return `// prettier-ignore
 // This file is auto generated. DO NOT EDIT
 
+type IsAllPropertiesOptional<T> = { [K in keyof T]?: any } extends T ? true : false
+
 type PathToParams = {
   ${(
     await Promise.all(
@@ -78,14 +80,15 @@ type PathToParams = {
  */
 export function $path<Path extends keyof PathToParams>(
   path: Path,
-  args: PathToParams[Path],
+  ...args: IsAllPropertiesOptional<PathToParams[Path]> extends true ? [p?: PathToParams[Path]] : [p: PathToParams[Path]]
 ): string {
+  const { params, query, hash } = (args[0] ?? {} as any)
   return (
-    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
-    (args.query
-      ? '?' + new URLSearchParams(args.query as any).toString()
+    (params ? path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => params[key]) : path) +
+    (query
+      ? '?' + new URLSearchParams(query as any).toString()
       : '') +
-    (args.hash ? '#' + args.hash : '')
+    (hash ? '#' + hash : '')
   )
 }
 
