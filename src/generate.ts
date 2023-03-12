@@ -8,28 +8,28 @@ import { defaultFilePathToRoutePath, removePathExtension, removeSuffix } from ".
 import kleur from "kleur";
 import chokidar from "chokidar";
 
-type Option = { configFilePath: string | undefined; output?: string; watch: boolean };
+type Option = { configFilePath: string | undefined; output?: string; watch?: boolean };
 
-export async function generate({ configFilePath, output, watch }: Option): Promise<void> {
+export async function generate({ configFilePath, output, watch = false }: Option): Promise<void> {
   const config: Config =
     configFilePath === undefined
       ? autoDetectConfig()
       : jiti(process.cwd(), {
           interopDefault: true,
           esmResolve: true,
-        })(path.resolve("./tsp.config"));
+        })(path.resolve(configFilePath));
 
   const pathList = await glob(config.routesGlob, { cwd: config.routeDir });
   const ignorePathList =
     config.ignoreGlob === undefined ? [] : await glob(config.ignoreGlob, { cwd: config.routeDir });
 
   const outputFilePath =
-    output ?? config.output ?? fs.existsSync("src") ? "src/path.ts" : "path.ts";
+    output ?? config.output ?? (fs.existsSync("src") ? "src/path.ts" : "path.ts");
 
-  const run = () => {
-    const pathHelper = createPathHelper(
+  const run = async () => {
+    const pathHelper = await createPathHelper(
       pathList.filter((p) => !ignorePathList.includes(p)),
-      { dynamicSegmentPattern: config.dynamicSegmentPattern },
+      { ...config, output: outputFilePath },
     );
     fs.writeFileSync(outputFilePath, pathHelper, "utf-8");
   };
@@ -47,13 +47,13 @@ export async function generate({ configFilePath, output, watch }: Option): Promi
       ignored: config.ignoreGlob,
       cwd: config.routeDir,
     });
-    watcher.on("all", (event, path) => {
+    watcher.on("all", async (event, path) => {
       console.log(event, path);
-      run();
+      await run();
       console.log(kleur.green("Regenerated path helper"));
     });
   } else {
-    run();
+    await run();
     console.log(`Path helper has been generated to ${kleur.bold(kleur.green(outputFilePath))}`);
   }
 }
