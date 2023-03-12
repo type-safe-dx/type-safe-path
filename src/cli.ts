@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 import sade from "sade";
+import consola from "consola";
 import { version } from "../package.json";
 import kleur from "kleur";
 import { autoDetectConfig } from "./config/detect";
@@ -40,7 +41,7 @@ prog
       };
 
       if (opts.watch) {
-        console.log(
+        consola.info(
           `Watching ${kleur.bold(
             kleur.green(
               (resolvedConfig.routeDir.endsWith("/")
@@ -55,18 +56,18 @@ prog
           cwd: resolvedConfig.routeDir,
         });
         watcher.on("all", async (event, path) => {
-          console.log(event, path);
+          consola.info(event, path);
           await run();
-          console.log(kleur.green("Regenerated path helper"));
+          consola.success(kleur.green("Regenerated path helper"));
         });
       } else {
         await run();
-        console.log(
+        consola.success(
           `Path helper has been generated to ${kleur.bold(kleur.green(resolvedConfig.output))}`,
         );
       }
     } catch (e) {
-      console.log(kleur.red((e as Error).message));
+      consola.error(e);
     }
   });
 

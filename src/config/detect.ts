@@ -3,6 +3,7 @@ import fs from "fs";
 import kleur from "kleur";
 import { removePathExtension, removeSuffix } from "../utils";
 import { defaultFilePathToRoutePath } from "./default";
+import consola from "consola";
 
 export function autoDetectConfig(): Partial<Omit<Config, "output">> {
   if (fs.existsSync("next.config.js")) {
@@ -63,5 +64,5 @@ export function autoDetectConfig(): Partial<Omit<Config, "output">> {
 }
 
 function showDetectedResult(framework: string) {
-  console.log(`Detected framework: ${kleur.green(framework)}`);
+  consola.info(`Detected framework: ${kleur.green(framework)}`);
 }

@@ -65,36 +65,36 @@ export async function generate({
 // This file is auto generated. DO NOT EDIT
 
 type PathToParams = {
-${(
-  await Promise.all(
-    pathList.filter((p) => !ignorePathList.includes(p)).map((p) => createTypeDefinitionRow(p)),
-  )
-).join(",\n  ")}
+  ${(
+    await Promise.all(
+      pathList.filter((p) => !ignorePathList.includes(p)).map((p) => createTypeDefinitionRow(p)),
+    )
+  ).join(",\n  ")}
 }
 
 /**
-* @example
-* buildPath('/posts/[id]', { id: 1 }) // => '/posts/1'
-*/
+ * @example
+ * buildPath('/posts/[id]', { id: 1 }) // => '/posts/1'
+ */
 export function buildPath<Path extends keyof PathToParams>(
 path: Path,
 args: PathToParams[Path],
 ): string {
-return (
-  path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
-  (args.query
-    ? '?' + new URLSearchParams(args.query as any).toString()
-    : '') +
-  (args.hash ? '#' + args.hash : '')
-)
+  return (
+    path.replace(${new RegExp(dynamicSegmentRegex, "g")}, (_, key) => ((args as any).params)[key]) +
+    (args.query
+      ? '?' + new URLSearchParams(args.query as any).toString()
+      : '') +
+    (args.hash ? '#' + args.hash : '')
+  )
 }
 
 /**
-* @example
-* echoPath('/posts/[id]') // => '/posts/[id]'
-*/
+ * @example
+ * echoPath('/posts/[id]') // => '/posts/[id]'
+ */
 export function echoPath<Path extends keyof PathToParams>(path: Path): string {
-return path
+  return path
 }
 `;
 }
