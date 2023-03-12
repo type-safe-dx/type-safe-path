@@ -23,11 +23,11 @@ test("bracket", async () => {
 
     /**
      * @example
-     * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
+     * $path('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
      */
-    export function buildPath<Path extends keyof PathToParams>(
-    path: Path,
-    args: PathToParams[Path],
+    export function $path<Path extends keyof PathToParams>(
+      path: Path,
+      args: PathToParams[Path],
     ): string {
       return (
         path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
@@ -40,9 +40,9 @@ test("bracket", async () => {
 
     /**
      * @example
-     * echoPath('/posts/[id]') // => '/posts/[id]'
+     * $echoPath('/posts/[id]') // => '/posts/[id]'
      */
-    export function echoPath<Path extends keyof PathToParams>(path: Path): string {
+    export function $echoPath<Path extends keyof PathToParams>(path: Path): string {
       return path
     }
     "
@@ -62,11 +62,11 @@ it("colon", async () => {
 
     /**
      * @example
-     * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
+     * $path('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
      */
-    export function buildPath<Path extends keyof PathToParams>(
-    path: Path,
-    args: PathToParams[Path],
+    export function $path<Path extends keyof PathToParams>(
+      path: Path,
+      args: PathToParams[Path],
     ): string {
       return (
         path.replace(/\\\\[(\\\\w+)\\\\]/g, (_, key) => ((args as any).params)[key]) +
@@ -79,9 +79,9 @@ it("colon", async () => {
 
     /**
      * @example
-     * echoPath('/posts/[id]') // => '/posts/[id]'
+     * $echoPath('/posts/[id]') // => '/posts/[id]'
      */
-    export function echoPath<Path extends keyof PathToParams>(path: Path): string {
+    export function $echoPath<Path extends keyof PathToParams>(path: Path): string {
       return path
     }
     "

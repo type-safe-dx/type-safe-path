@@ -74,9 +74,9 @@ type PathToParams = {
 
 /**
  * @example
- * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
+ * $path('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
  */
-export function buildPath<Path extends keyof PathToParams>(
+export function $path<Path extends keyof PathToParams>(
   path: Path,
   args: PathToParams[Path],
 ): string {
@@ -91,9 +91,9 @@ export function buildPath<Path extends keyof PathToParams>(
 
 /**
  * @example
- * echoPath('/posts/[id]') // => '/posts/[id]'
+ * $echoPath('/posts/[id]') // => '/posts/[id]'
  */
-export function echoPath<Path extends keyof PathToParams>(path: Path): string {
+export function $echoPath<Path extends keyof PathToParams>(path: Path): string {
   return path
 }
 `;
