@@ -1,0 +1,9 @@
+{
+  "name": "bracket",
+  "scripts": {
+    "generate": "type-safe-path -o ../../generated/next-pages/output.ts"
+  },
+  "devDependencies": {
+    "@kiyoshiro/type-safe-path": "../../../"
+  }
+}

@@ -51,6 +51,12 @@ importers:
     devDependencies:
       '@kiyoshiro/type-safe-path': link:../../..
 
+  e2e/projects/next-pages:
+    specifiers:
+      '@kiyoshiro/type-safe-path': ../../../
+    devDependencies:
+      '@kiyoshiro/type-safe-path': link:../../..
+
 packages:
 
   /@ampproject/remapping/2.2.0:
