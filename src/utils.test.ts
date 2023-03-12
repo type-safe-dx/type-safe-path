@@ -19,7 +19,7 @@ describe("removePathExtension", () => {
 
 describe("removePrefix", () => {
   it("removePrefix should remove the `pages` characters", () => {
-    expect(removePrefix("pages/posts/index", "index")).toBe("/posts/index");
+    expect(removePrefix("pages/posts/index", "pages")).toBe("/posts/index");
   });
 });
 
