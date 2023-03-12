@@ -11,7 +11,7 @@ import fs from "fs";
 import defu from "defu";
 import { defaultFilePathToRoutePath } from "./config/default";
 
-const loadTsConfig = (configPath: string) =>
+const loadConfig = (configPath: string) =>
   jiti(process.cwd(), { interopDefault: true, esmResolve: true })(configPath);
 
 const prog = sade("type-safe-path", true);
@@ -23,9 +23,10 @@ prog
   .option("-w, --watch", "watch the file changes and regenerate the path helper. e.g. src/**/*.tsx")
   .action(async (opts: { config?: string; output?: string; watch?: boolean }) => {
     try {
+      const configFilePath = path.resolve(process.cwd(), opts.config ?? "tsp.config.ts");
       const resolvedConfig = defu(
         { output: opts.output } as Required<Config>,
-        loadTsConfig(path.resolve(process.cwd(), opts.config ?? "tsp.config.ts")),
+        fs.existsSync(configFilePath) ? loadConfig(configFilePath) : {},
         autoDetectConfig(),
         { filePathToRoutePath: defaultFilePathToRoutePath } as Config,
       );
