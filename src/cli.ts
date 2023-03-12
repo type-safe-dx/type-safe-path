@@ -29,15 +29,15 @@ prog
         { output: opts.output } as Required<Config>,
         fs.existsSync(configFilePath) ? loadConfig(configFilePath) : {},
         autoDetectConfig(),
-        { filePathToRoutePath: defaultFilePathToRoutePath } as Config,
+        {
+          filePathToRoutePath: defaultFilePathToRoutePath,
+          output: fs.existsSync("src") ? "src/path.ts" : "path.ts",
+        } as Config,
       );
 
       const { generate } = await import("./generate");
       const run = async () => {
-        fs.writeFileSync(
-          path.resolve(resolvedConfig.output ?? (fs.existsSync("src") ? "src/path.ts" : "path.ts")),
-          await generate(resolvedConfig),
-        );
+        fs.writeFileSync(path.resolve(resolvedConfig.output), await generate(resolvedConfig));
       };
 
       if (opts.watch) {
