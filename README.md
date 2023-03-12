@@ -32,36 +32,40 @@ pages/
 
 ```ts
 type PathToParams = {
-  posts: never
-  "posts/[id]": { id: string | number }
+  "/posts": {
+    query?: Record<string, string | number | string[] | number[]>
+    hash?: string
+  }
+  "/posts/[id]": {
+    params: { id: string | number }
+    query?: Record<string, string | number | string[] | number[]>
+    hash?: string
+  }
 }
 
+/**
+ * @example
+ * buildPath('/posts/[id]', { params: { id: 1 }}) // => '/posts/1'
+ */
 export function buildPath<Path extends keyof PathToParams>(
   path: Path,
-  ...params: PathToParams[Path] extends never
-    ? [
-        params?: {
-          searchParams?: Record<string, string | number>
-          hash?: string
-        }
-      ]
-    : [
-        params: PathToParams[Path] & {
-          searchParams?: Record<string, string | number>
-          hash?: string
-        }
-      ]
+  args: PathToParams[Path]
 ): string {
-  const [pathParams] = params
-  if (pathParams === undefined) return path
-
   return (
-    path.replace(/\[(\w+)\]/g, (_, key) => pathParams[key]) +
-    (pathParams.searchParams
-      ? "?" + new URLSearchParams(pathParams.searchParams as any).toString()
+    path.replace(/\[(\w+)\]/g, (_, key) => (args as any).params[key]) +
+    (args.query
+      ? "?" + new URLSearchParams(args.query as any).toString()
       : "") +
-    (pathParams.hash ? "#" + pathParams.hash : "")
+    (args.hash ? "#" + args.hash : "")
   )
+}
+
+/**
+ * @example
+ * echoPath('/posts/[id]') // => '/posts/[id]'
+ */
+export function echoPath<Path extends keyof PathToParams>(path: Path): string {
+  return path
 }
 ```
 
@@ -73,7 +77,7 @@ https://user-images.githubusercontent.com/40315079/212696306-ed6c9f88-4641-4549-
 
 |                                    | This library                                                                                                                                                                                              | [pathpida](https://github.com/aspida/pathpida)                      |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| API                                | <code>buildPath('posts/[id]', {id:1})</code>                                                                                                                                                              | <code>pagesPath.posts.\_id(1).$url()</code>                         |
+| API                                | <code>buildPath('posts/[id]', { params: { id: 1 }})</code>                                                                                                                                                | <code>pagesPath.posts.\_id(1).$url()</code>                         |
 | Bundle Size                        | Constant even if the number of paths increases, because it only generates few functions.                                                                                                                  | Increases as paths increase, because it generates a big object.     |
 | For long path(e.g. `/foo/bar/baz`) | Just select one completion and we can search path like fuzzy<br><img width="564" alt="image" src="https://user-images.githubusercontent.com/40315079/213208755-c5f80f43-d59d-4a14-be76-da7316fb58bb.png"> | Needs to push `.` key many times for `pagesPath.foo.bar.baz.$url()` |
 | Supported Frameworks               | Any frameworks (thanks to its flexible configuration)                                                                                                                                                     | Next.js, Nuxt.js                                                    |

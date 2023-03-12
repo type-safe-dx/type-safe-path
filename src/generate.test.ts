@@ -23,7 +23,7 @@ test("bracket", async () => {
 
     /**
      * @example
-     * buildPath('/posts/[id]', { id: 1 }) // => '/posts/1'
+     * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
      */
     export function buildPath<Path extends keyof PathToParams>(
     path: Path,
@@ -62,7 +62,7 @@ it("colon", async () => {
 
     /**
      * @example
-     * buildPath('/posts/[id]', { id: 1 }) // => '/posts/1'
+     * buildPath('/posts/[id]', { params: { id: 1 } }) // => '/posts/1'
      */
     export function buildPath<Path extends keyof PathToParams>(
     path: Path,
