@@ -19,11 +19,10 @@ export async function extractQueryType({
     return `import('${importPath}').Query`;
   }
 
-  let openBraceCount = 0;
-  let closeBraceCount = 0;
-
   const startIndex = source.indexOf("export type Query");
   const endIndex = (() => {
+    let openBraceCount = 0;
+    let closeBraceCount = 0;
     for (let i = startIndex; i < source.length; i++) {
       if (source[i] === "{") openBraceCount++;
       if (source[i] === "}") closeBraceCount++;
